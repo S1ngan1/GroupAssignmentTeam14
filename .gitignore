@@ -1,3 +1,6 @@
+# This is a .gitignore file
+# This file specifics which folder or file should be ignored by Git
+
 # Compiled class file
 *.class
 
