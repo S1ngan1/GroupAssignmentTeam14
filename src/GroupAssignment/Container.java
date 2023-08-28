@@ -14,7 +14,10 @@ public class Container {
     }
 
     public String getContainerType() {
-        return containerType;
+        if (setContainerType(this.containerType)){
+            return containerType;
+        }
+        return "Enter the proper container type";
     }
 
     //Provide the available container types and force users to choose one
@@ -22,7 +25,7 @@ public class Container {
         String[] availableContainerType = {"Dry storage", "Open top", "Open side", "Refrigerated", "Liquid"};
         boolean matched = false;
         for (String type : availableContainerType){
-            if (type.equals(containerType)){
+            if (type.toLowerCase().equals(containerType.toLowerCase())){
                 matched = true;
             }
         }
