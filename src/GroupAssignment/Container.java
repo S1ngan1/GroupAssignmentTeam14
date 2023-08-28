@@ -25,7 +25,6 @@ public class Container {
         String[] availableContainerType = {"Dry storage", "Open top", "Open side", "Refrigerated", "Liquid"};
         boolean matched = false;
         for (String type : availableContainerType){
-            //This will skip the case of the words
             if (type.toLowerCase().equals(containerType.toLowerCase())){
                 matched = true;
             }
@@ -56,8 +55,11 @@ public class Container {
 
     @Override
     public String toString() {
+        if (!setContainerType(this.containerType)){
+            return "No such container exist";
+        }
         return "Container{" +
-                "containerType = '" + containerType + '\'' +
+                "containerType = '" + containerType.toLowerCase() + '\'' +
                 ", id = " + id +
                 ", weight = " + weight +
                 '}';

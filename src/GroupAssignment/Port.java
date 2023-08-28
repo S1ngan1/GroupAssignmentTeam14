@@ -70,7 +70,7 @@ public class Port {
     @Override
     public String toString() {
         return "Port{" +
-                " p_ID = " + p_ID +
+                "p_ID = " + p_ID +
                 ", name = '" + name + '\'' +
                 ", X = " + X +
                 ", Y = " + Y +

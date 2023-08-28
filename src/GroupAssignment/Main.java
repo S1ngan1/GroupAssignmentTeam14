@@ -7,12 +7,12 @@ public class Main {
         Port port3 = new Port(3976251, "Phuc", 36.5F,  40.1F, 4200F, true);
 
         Container container1 = new Container("open top", 9551, 2.8F);
-        Container container2 = new Container("Wet stoRaGe", 951, 4.6F);
+        Container container2 = new Container("wet stoRaGe", 951, 4.6F);
 
         System.out.println(port1);
         System.out.println(port2);
         System.out.println(port3.getStoringCapacity());
-        System.out.println(container1.getContainerType());
-        System.out.println(container2.getContainerType());
+        System.out.println(container1);
+        System.out.println(container2);
     }
 }
