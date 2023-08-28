@@ -9,10 +9,22 @@ public class Main {
         Container container1 = new Container("open top", 9551, 2.8F);
         Container container2 = new Container("wet stoRaGe", 951, 4.6F);
 
-        System.out.println(port1);
+        Vehicle vehicle1 = new Vehicle("Ford F-150", 101);
+        Vehicle vehicle2 = new Vehicle("Chevrolet Colorado ZR2", 102);
+        Vehicle vehicle3 = new Vehicle("Toyota Tacoma TRD Pro", 103);
+
+        System.out.println(vehicle1);
+        vehicle1.loadContainer();
+        vehicle1.loadContainer();
+        vehicle1.loadContainer();
+        vehicle1.loadContainer();
+        vehicle1.unloadContainer();
+        System.out.println(vehicle1.displayGeneralNumberOfContainer());
+
+        /*System.out.println(port1);
         System.out.println(port2);
         System.out.println(port3.getStoringCapacity());
         System.out.println(container1);
-        System.out.println(container2);
+        System.out.println(container2);*/
     }
 }

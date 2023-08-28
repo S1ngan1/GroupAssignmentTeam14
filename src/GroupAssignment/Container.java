@@ -13,6 +13,7 @@ public class Container {
 
     }
 
+    //get the appropraite container type
     public String getContainerType() {
         if (setContainerType(this.containerType)){
             return containerType;
