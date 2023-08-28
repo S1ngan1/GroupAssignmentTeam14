@@ -6,10 +6,11 @@ public class Container {
     private float weight;
 
 
-    public Container(int id, float weight){
+    public Container(String containerType, int id, float weight){
+        this.containerType = containerType;
         this.id = id;
         this.weight = weight;
-        this.containerType = containerType;
+
     }
 
     public String getContainerType() {
@@ -47,5 +48,14 @@ public class Container {
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Container{" +
+                "containerType = '" + containerType + '\'' +
+                ", id = " + id +
+                ", weight = " + weight +
+                '}';
     }
 }
