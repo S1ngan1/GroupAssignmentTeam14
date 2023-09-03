@@ -1,10 +1,13 @@
 package GroupAssignment;
 
+import java.util.HashMap;
+
 public class Container {
     private String containerType;
     private int id;
     private float weight;
-
+    private static HashMap<String, Float> ship_Container;
+    private static HashMap<String, Float> truck_Container;
 
     public Container(String containerType, int id, float weight){
         this.containerType = containerType;
