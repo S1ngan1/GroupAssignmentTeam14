@@ -1,4 +1,5 @@
 package Vehicle;
+
 import Container.Container;
 
 import java.util.ArrayList;
@@ -7,10 +8,10 @@ import java.util.Scanner;
 public class Vehicle {
     //A vehicle has a name, id, and a carrier which hold a number of containers
     private String name;
-    private int id;
+    private String id;
     private ArrayList<Container> carrier;
 
-    public Vehicle(String name, int id){
+    public Vehicle(String name, String id){
         //There is no parameter for carrier here. Every new vehicle has an empty carrier which is essentially an ArrayList
         this.name = name;
         this.id = id;
@@ -25,11 +26,11 @@ public class Vehicle {
         this.name = name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,10 +55,7 @@ public class Vehicle {
     }
     //Display the general number of container
     public String displayGeneralNumberOfContainer(){
-        if (carrier.size() == 1 || carrier.size() == 0){
-            return "Currently has " + carrier.size() + " container";
-        }
-        return "Currently has " + carrier.size() + " containers";
+        return "Number of container: " + carrier.size();
     }
 
     @Override

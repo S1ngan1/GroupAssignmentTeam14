@@ -33,7 +33,7 @@ public class Container {
                 matched = true;
             }
         }
-
+    //set the container type if it is valid
         if (matched){
             this.containerType = containerType;
             return true;
