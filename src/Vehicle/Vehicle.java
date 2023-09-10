@@ -35,7 +35,7 @@ public class Vehicle {
     }
 
     //Add a new container to the vehicle's carrier
-    public void loadContainer(){
+    public boolean loadContainer(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Container type: ");
         String containerType = scanner.nextLine();
@@ -47,6 +47,7 @@ public class Vehicle {
         Container container = new Container(containerType, containerID, containerWeight);
 
         carrier.add(container);
+        return true;
     }
 
     //Unload a container from the vehicle

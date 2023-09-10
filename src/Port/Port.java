@@ -3,11 +3,12 @@ package Port;
 import Container.Container;
 import Vehicle.Vehicle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Port {
-    private int p_ID;
-    private String name;
+public class Port implements Serializable {
+    private String port_ID;
+    private String port_name;
     private float X;
     private float Y;
     private float storingCapacity;
@@ -19,29 +20,29 @@ public class Port {
 
     //private ArrayList<Trip> tripRecord;
 
-    public Port(int p_ID, String name, float X, float Y, float storingCapacity, boolean landingAbility){
-        this.p_ID = p_ID;
-        this.name = name;
+    public Port(String port_ID, String port_name, float X, float Y, float storingCapacity, boolean landingAbility){
+        this.port_ID = port_ID;
+        this.port_name = port_name;
         this.X = X;
         this.Y = Y;
         this.storingCapacity = storingCapacity;
         this.landingAbility = landingAbility;
     }
 
-    public int getP_ID() {
-        return p_ID;
+    public String getP_ID() {
+        return port_ID;
     }
 
     public void setP_ID(int p_ID) {
-        this.p_ID = p_ID;
+        this.port_ID = port_ID;
     }
 
     public String getName() {
-        return name;
+        return port_name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.port_name = port_name;
     }
 
     public float getX() {
@@ -94,7 +95,7 @@ public class Port {
         this.tripRecord = tripRecord;
     }*/
 
-    public boolean isLandingAbility() {
+    public boolean getLandingAbility() {
         return landingAbility;
     }
 
@@ -102,11 +103,18 @@ public class Port {
         this.landingAbility = landingAbility;
     }
 
+    public boolean vehicleArrival(){
+        
+    }
+    public boolean vehicleDepart(){
+
+    }
+
     @Override
     public String toString() {
         return "Port{" +
-                "p_ID = " + p_ID +
-                ", name = '" + name + '\'' +
+                "port_ID = " + port_ID +
+                ", port_name = '" + port_name + '\'' +
                 ", X = " + X +
                 ", Y = " + Y +
                 ", storingCapacity = " + storingCapacity +
