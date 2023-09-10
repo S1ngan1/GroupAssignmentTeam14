@@ -5,11 +5,11 @@ import java.util.HashMap;
 public class Container {
     private String containerType;
     private int id;
-    private float weight;
-    private static HashMap<String, Float> ship_Container;
-    private static HashMap<String, Float> truck_Container;
+    private double weight;
+    private static HashMap<String, Double> ship_Container;
+    private static HashMap<String, Double> truck_Container;
 
-    public Container(String containerType, int id, float weight){
+    public Container(String containerType, int id, double weight){
         this.containerType = containerType;
         this.id = id;
         this.weight = weight;
@@ -49,11 +49,11 @@ public class Container {
         this.id = id;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 

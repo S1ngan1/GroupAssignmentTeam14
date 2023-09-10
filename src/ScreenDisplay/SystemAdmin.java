@@ -17,13 +17,13 @@ public class SystemAdmin {
         System.out.print("Port name: ");
         String port_name = scanner.nextLine();
         System.out.print("Longitude: ");
-        float X = scanner.nextFloat();
+        double X = scanner.nextDouble();
         scanner.nextLine();
         System.out.print("Latitude: ");
-        float Y = scanner.nextFloat();
+        double Y = scanner.nextDouble();
         scanner.nextLine();
         System.out.print("Storing capacity: ");
-        float storingCapacity = scanner.nextFloat();
+        double storingCapacity = scanner.nextDouble();
         scanner.nextLine();
         System.out.print("Landing ability: ");
         boolean landingAbility = scanner.nextBoolean();

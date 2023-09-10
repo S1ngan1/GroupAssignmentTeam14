@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class Port implements Serializable {
     private String port_ID;
     private String port_name;
-    private float X;
-    private float Y;
-    private float storingCapacity;
+    private double X;
+    private double Y;
+    private double storingCapacity;
     private boolean landingAbility;
 
     private ArrayList<Vehicle> vehicleHangar;
@@ -20,7 +20,7 @@ public class Port implements Serializable {
 
     //private ArrayList<Trip> tripRecord;
 
-    public Port(String port_ID, String port_name, float X, float Y, float storingCapacity, boolean landingAbility){
+    public Port(String port_ID, String port_name, double X, double Y, double storingCapacity, boolean landingAbility){
         this.port_ID = port_ID;
         this.port_name = port_name;
         this.X = X;
@@ -45,27 +45,27 @@ public class Port implements Serializable {
         this.port_name = port_name;
     }
 
-    public float getX() {
+    public double getX() {
         return X;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         X = x;
     }
 
-    public float getY() {
+    public double getY() {
         return Y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         Y = y;
     }
 
-    public float getStoringCapacity() {
+    public double getStoringCapacity() {
         return storingCapacity;
     }
 
-    public void setStoringCapacity(float storingCapacity) {
+    public void setStoringCapacity(double storingCapacity) {
         if (storingCapacity > 0){
             this.storingCapacity = storingCapacity;
         }
@@ -104,10 +104,15 @@ public class Port implements Serializable {
     }
 
     public boolean vehicleArrival(){
-        
+
+        return true;
     }
     public boolean vehicleDepart(){
+        return true;
+    }
 
+    public boolean addContainer(){
+        return true;
     }
 
     @Override
