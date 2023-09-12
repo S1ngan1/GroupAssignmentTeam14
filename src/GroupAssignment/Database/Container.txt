@@ -1,4 +1,6 @@
-1, Dry Storage, 50
-2, Open Side, 70
-3, Open Top, 40
-4, Tanker, 20
+c-1, Dry Storage, 50
+c-2, Open Side, 70
+c-3, Open Top, 40
+c-4, Tanker, 20
+c-5, Open Side, 65.0
+c-6, Refrigerated, 100.0

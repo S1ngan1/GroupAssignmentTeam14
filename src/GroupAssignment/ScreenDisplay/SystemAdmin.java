@@ -1,6 +1,7 @@
 package ScreenDisplay;
 
 import Port.Port;
+import Container.Container;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -15,6 +16,8 @@ public class SystemAdmin {
     private String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
     private String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
     private Port port;
+
+    private Container container;
 
     public boolean addPort(){
         // Let the user types in the ports information
@@ -64,6 +67,44 @@ public class SystemAdmin {
         return true;
     }
     public boolean addContainer(){
+        // Add container information
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Creating a new container");
+        System.out.print("Container ID: ");
+        String c_ID = scanner.nextLine();
+        System.out.print("Container Type: ");
+        String c_type = scanner.nextLine();
+        System.out.print("Weight: ");
+        double c_weight = scanner.nextDouble();
+        scanner.nextLine();
+
+        container = new Container(c_ID, c_type, c_weight);
+
+        if(container.setContainerType(c_type)){
+            try {
+                // Replace with the path to your existing text file.
+                // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
+                FileWriter writer = new FileWriter(ContainerFilePath, true);
+
+                // Write the port's attributes as plain text
+                writer.write("\n"+ container.getId()+", "+ container.getContainerType()+", "+container.getWeight());
+
+                // Close the FileWriter
+                writer.close();
+
+                //Print the success message
+                System.out.println("Successfully created a new container");
+                return true;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        else {
+            System.out.println("Failed to create a container");
+        }
         return true;
     }
     public boolean calculateDistance(){

@@ -14,6 +14,6 @@ public class Main {
         Vehicle truck1 = new Vehicle("T_01", "Ford F-150", 200D, 72D, 100D, "1");
         Vehicle truck2 = new Vehicle("T_02", "Ford F-150", 150D, 72D, 100D, "2");
 
-        admin.calculateDistance();
+        admin.addContainer();
     }
 }
