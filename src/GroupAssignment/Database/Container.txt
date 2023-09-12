@@ -1,5 +1,4 @@
-1, Dry Storage, 50.0
+1, Dry Storage, 50
 2, Open Side, 70
 3, Open Top, 40
 4, Tanker, 20
-

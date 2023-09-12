@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Vehicle {
+    private String filePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
     //A vehicle has a name, id, and a carrier which hold a number of containers
     private String name;
     private String id;
@@ -23,15 +24,16 @@ public class Vehicle {
     private double totalWeight; //not an atrribute in the constructor
     private ArrayList<Container> carrier; //not an atrribute in the constructor
 
-    private Port currentPort; //not included in constructor
+    private String currentPort; //not included in constructor
 
-    public Vehicle(String id, String name, double carryingCapacity, double currentFuel, double fuelCapacity) {
+    public Vehicle(String id, String name, double carryingCapacity, double currentFuel, double fuelCapacity, String currentPort) {
         //There is no parameter for carrier here. Every new vehicle has an empty carrier which is essentially an ArrayList
         this.id = id;
         this.name = name;
         this.carryingCapacity = carryingCapacity;
         this.currentFuel = currentFuel;
         this.fuelCapacity = fuelCapacity;
+        this.currentPort = currentPort;
         this.totalWeight = 0;
         this.carrier = new ArrayList<Container>();
     }
@@ -76,6 +78,13 @@ public class Vehicle {
         this.fuelCapacity = fuelCapacity;
     }
 
+    public String getCurrentPort() {
+        return currentPort;
+    }
+
+    public void setCurrentPort(String currentPort) {
+        this.currentPort = currentPort;
+    }
 
     //If a container is found in the container list and the vehicle is still able to carry
     // the piles of container, it will add that container to the vehicle's carrier
@@ -93,7 +102,7 @@ public class Vehicle {
 
         // Read data from the text file
         ArrayList<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",\\s+"); // Use regex to split by comma and optional spaces
@@ -120,7 +129,7 @@ public class Vehicle {
             e.printStackTrace();
         }
         if (found){
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt"))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
                 for (String line : lines) {
                     writer.write(line);
                     writer.newLine();
@@ -164,7 +173,7 @@ public class Vehicle {
                 // Write the container information into container.txt
                 try {
                     // Open the file in append mode by creating a FileWriter with the 'true' parameter
-                    FileWriter writer = new FileWriter("C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt", true);
+                    FileWriter writer = new FileWriter(filePath, true);
 
                     // Write the container's attributes as plain text
                     writer.write("\n" + unloadedContainer.getId() + ", " + unloadedContainer.getContainerType() + ", " + unloadedContainer.getWeight());
@@ -192,31 +201,19 @@ public class Vehicle {
     }
 
     //Determining whether the vehicle can ship the containers to another port or not
-    public boolean approvalForTransport(){
+    // Move the vehicle only if it is verified for transportation
+    // I just made it moved to another port freely with no constraint. Update expected
+    public boolean moveVehicle(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter vehicle ID: ");
         String vID = scanner.nextLine();
+        System.out.print("Move to port number: ");
+        int destinationPort = scanner.nextInt();
+        scanner.nextLine();
 
-        /*The next step is to open and read the truck or ship.txt base on the first letter of the ID
-          Then it checks the user input ID with the ID available in the text file, then it will check the capacity bla bla */
+        setCurrentPort(String.valueOf(destinationPort));
         return true;
-    }
-
-    // Move the vehicle only if it is verified for transportation
-    public int moveVehicle(){
-        if (approvalForTransport()){
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Move to port number: ");
-            int destinationPort = scanner.nextInt();
-            scanner.nextLine();
-
-            return destinationPort; //Record the destination port number for further usage
         }
-        else{
-            System.out.println("Unable to transport the vehicle");
-            return 0;
-        }
-    }
 
     //Display the general number of container
     public String displayGeneralNumberOfContainer(){
@@ -231,6 +228,7 @@ public class Vehicle {
                 ", carryingCapacity = " + carryingCapacity +
                 ", currentFuel = " + currentFuel +
                 ", fuelCapacity = " + fuelCapacity +
+                ", currentPort = " + currentPort +
                 ", totalWeight = " + totalWeight +
                 '}';
     }

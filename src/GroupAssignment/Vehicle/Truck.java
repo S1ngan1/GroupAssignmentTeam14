@@ -1,4 +1,4 @@
-package Vehicle;
+package GroupAssignment.Vehicle;
 
 import java.util.ArrayList;
 import Container.Container;
@@ -9,9 +9,9 @@ public class Truck extends Vehicle {
     private String truckType;
     private double totalWeight; //not an atrribute in the constructor
     private ArrayList<Container> carrier; //not an atrribute in the constructor
-    private Port currentPort; //not included in constructor
-    public Truck (String name, String id, double carryingCapacity, double currentFuel, double fuelCapacity, String truckType){
-        super(name, id, carryingCapacity, currentFuel, fuelCapacity);
+    private String currentPort; //not included in constructor
+    public Truck (String name, String id, double carryingCapacity, double currentFuel, double fuelCapacity, String currentPort, String truckType){
+        super(name, id, carryingCapacity, currentFuel, fuelCapacity, currentPort);
         this.truckType = truckType;
         this.totalWeight = 0;
         this.carrier = new ArrayList<Container>();
