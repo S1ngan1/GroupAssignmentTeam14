@@ -14,7 +14,7 @@ public class Port implements Serializable {
     private double storingCapacity;
     private boolean landingAbility;
 
-    private ArrayList<Vehicle> vehicleHangar;
+    public ArrayList<Vehicle> vehicleHangar;
 
     private ArrayList<Container> containerHangar;
 
@@ -27,6 +27,8 @@ public class Port implements Serializable {
         this.Y = Y;
         this.storingCapacity = storingCapacity;
         this.landingAbility = landingAbility;
+        this.vehicleHangar = new ArrayList<Vehicle>();
+        this.containerHangar = new ArrayList<Container>();
     }
 
     public String getP_ID() {
@@ -103,15 +105,30 @@ public class Port implements Serializable {
         this.landingAbility = landingAbility;
     }
 
+
+    public boolean vehicleDepature(){
+        return true;
+    }
     public boolean vehicleArrival(){
+        //Vehicle vehicle = new Vehicle();
 
         return true;
     }
+
+    public boolean moveContainerToPortStorage(Container container){
+        containerHangar.add(container);
+        return true;
+    }
+
+    public boolean removeContainer(){
+        return true;
+    }
+
     public boolean vehicleDepart(){
         return true;
     }
 
-    public boolean addContainer(){
+    public boolean Container(){
         return true;
     }
 

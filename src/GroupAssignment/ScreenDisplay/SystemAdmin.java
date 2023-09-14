@@ -2,6 +2,7 @@ package ScreenDisplay;
 
 import Port.Port;
 import Container.Container;
+import Vehicle.Vehicle;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -15,9 +16,14 @@ import java.io.FileWriter;
 public class SystemAdmin {
     private String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
     private String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
+
+    private String ShipFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Ship.txt";
+    private String TruckFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Truck.txt";
     private Port port;
 
     private Container container;
+
+    private Vehicle vehicle;
 
     public boolean addPort(){
         // Let the user types in the ports information
@@ -64,6 +70,74 @@ public class SystemAdmin {
         }
     }
     public boolean addVehicle(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Creating a new vehicle");
+        System.out.print("Vehicle ID: ");
+        String v_ID = scanner.nextLine();
+        System.out.print("Vehicle Type: "); //not included in constructor
+        String v_type = scanner.nextLine();
+        System.out.print("Vehicle Name: ");
+        String v_name = scanner.nextLine();
+        System.out.print("Current Fuel: ");
+        double v_fuel = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Fuel Capacity: ");
+        double v_fc = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Carrying Capacity: ");
+        double v_cc = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.print("Current Port (null if sailaway): ");
+        String v_port = scanner.nextLine();
+
+        vehicle = new Vehicle(v_ID, v_name, v_fuel, v_fc, v_cc, v_port);
+
+
+        if("Ship".equals(v_type)){
+            try {
+                // Replace with the path to your existing text file.
+                // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
+                FileWriter writer = new FileWriter(ShipFilePath, true);
+
+                // Write the ship attributes as plain text
+                writer.write("\n"+ vehicle.getId()+", "+ vehicle.getName()+", "+vehicle.getCurrentFuel()+", "+vehicle.getFuelCapacity()+", "+vehicle.getCarryingCapacity()+", "+vehicle.getCurrentPort());
+
+                // Close the FileWriter
+                writer.close();
+
+                //Print the success message
+                System.out.println("Successfully created a new ship");
+                return true;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        else if("Truck".equals(v_type)){
+            try {
+                // Replace with the path to your existing text file.
+                // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
+                FileWriter writer = new FileWriter(TruckFilePath, true);
+
+                // Write the ship attributes as plain text
+                writer.write("\n"+ vehicle.getId()+", "+ vehicle.getName()+", "+vehicle.getCurrentFuel()+", "+vehicle.getFuelCapacity()+", "+vehicle.getCarryingCapacity()+", "+vehicle.getCurrentPort());
+                // Close the FileWriter
+                writer.close();
+
+                //Print the success message
+                System.out.println("Successfully created a new truck");
+                return true;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        else {
+            System.out.println("Failed to create vehicle");
+        }
         return true;
     }
     public boolean addContainer(){
@@ -86,7 +160,7 @@ public class SystemAdmin {
                 // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
                 FileWriter writer = new FileWriter(ContainerFilePath, true);
 
-                // Write the port's attributes as plain text
+                // Write the container's attributes as plain text
                 writer.write("\n"+ container.getId()+", "+ container.getContainerType()+", "+container.getWeight());
 
                 // Close the FileWriter

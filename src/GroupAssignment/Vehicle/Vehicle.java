@@ -13,7 +13,8 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Vehicle {
-    private String filePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
+    private String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
+    private String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
     //A vehicle has a name, id, and a carrier which hold a number of containers
     private String name;
     private String id;
@@ -24,7 +25,9 @@ public class Vehicle {
     private double totalWeight; //not an atrribute in the constructor
     private ArrayList<Container> carrier; //not an atrribute in the constructor
 
-    private String currentPort; //not included in constructor
+    private String currentPort;
+
+    private Container unloadedContainer = null;
 
     public Vehicle(String id, String name, double carryingCapacity, double currentFuel, double fuelCapacity, String currentPort) {
         //There is no parameter for carrier here. Every new vehicle has an empty carrier which is essentially an ArrayList
@@ -102,7 +105,7 @@ public class Vehicle {
 
         // Read data from the text file
         ArrayList<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(ContainerFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",\\s+"); // Use regex to split by comma and optional spaces
@@ -129,7 +132,7 @@ public class Vehicle {
             e.printStackTrace();
         }
         if (found){
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ContainerFilePath))) {
                 for (String line : lines) {
                     writer.write(line);
                     writer.newLine();
@@ -144,17 +147,16 @@ public class Vehicle {
         return true;
     }
     //unloading the containers if there is one. Avoiding duplicate ID
-    public boolean unloadContainer(){
+    public boolean unloadContainer(Port currentPort) {
+        boolean successfullyUnloaded = true;
+
         // If there are containers to be removed
         if (carrier.size() > 0) {
-            Container unloadedContainer = null; // Declare it here
-
             // Telling the ID of the container to be removed
             Scanner scanner = new Scanner(System.in);
             System.out.print("Unloading container ID: ");
             int ID = scanner.nextInt();
             scanner.nextLine();
-
             // Unloading the container with the aforementioned ID
             String searchID = Integer.toString(ID);
 
@@ -163,42 +165,82 @@ public class Vehicle {
                 Container container = iterator.next();
                 if (container.getId().equals(searchID)) {
                     unloadedContainer = container;
-                    totalWeight-=container.getWeight();
+                    totalWeight -= container.getWeight();
                     iterator.remove(); // Remove the container
+                    break;
                 }
             }
 
             // Check if a container was found and unloaded
             if (unloadedContainer != null) {
-                // Write the container information into container.txt
-                try {
-                    // Open the file in append mode by creating a FileWriter with the 'true' parameter
-                    FileWriter writer = new FileWriter(filePath, true);
+                // Use the provided currentPort instead of creating a new one
+                if (currentPort != null) {
+                    // Write the container information into container.txt
+                    try {
+                        // Open the file in append mode by creating a FileWriter with the 'true' parameter
+                        FileWriter writer = new FileWriter(ContainerFilePath, true);
 
-                    // Write the container's attributes as plain text
-                    writer.write("\n" + unloadedContainer.getId() + ", " + unloadedContainer.getContainerType() + ", " + unloadedContainer.getWeight());
+                        // Write the container's attributes as plain text
+                        writer.write("\n" + unloadedContainer.getId() + ", " + unloadedContainer.getContainerType() + ", " + unloadedContainer.getWeight());
 
-                    // Close the FileWriter
-                    writer.close();
+                        // Close the FileWriter
+                        writer.close();
 
-                    // Print the success message
-                    System.out.println("Container unloaded");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
+                        // Insert the container into the port's containerHangar
+                        currentPort.moveContainerToPortStorage(unloadedContainer);
+                        System.out.println("Container unloaded and moved to " + currentPort.getP_ID());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        successfullyUnloaded = false;
+                    }
+                } else {
+                    System.out.println("No container to add to port");
+                    successfullyUnloaded = false;
                 }
-                return true;
-            }
-            else {
+            } else {
                 System.out.println("Container with ID " + searchID + " not found.");
-                return false;
+                successfullyUnloaded = false;
             }
-        }
-        else {
+        } else {
             System.out.println("There is no container to be unloaded");
-            return false;
+            successfullyUnloaded = false;
         }
+
+        return successfullyUnloaded;
     }
+
+    public Port createPortFromID(String currentPort) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(portFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts.length == 6 && parts[0].equals(currentPort)) {
+                    // Parse the data from the line
+                    String id = parts[0];
+                    String name = parts[1];
+                    double longitude = Double.parseDouble(parts[2]);
+                    double latitude = Double.parseDouble(parts[3]);
+                    int storageCapacity = Integer.parseInt(parts[4]);
+                    boolean landingAbility = Boolean.parseBoolean(parts[5]);
+
+                    // Create and return a new Port instance
+                    Port port = new Port(id, name, longitude, latitude, storageCapacity, landingAbility);
+
+                    // Initialize the ContainerHangar as an empty ArrayList
+                    port.setContainerHangar(new ArrayList<Container>());
+
+                    return port;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // If the portID is not found, return null or handle the error accordingly
+        return null;
+    }
+
 
     //Determining whether the vehicle can ship the containers to another port or not
     // Move the vehicle only if it is verified for transportation
