@@ -1,0 +1,5 @@
+Username, password, role
+MinhVuHuynh, huynhvuminh123, SystemAdmin
+LyMinhPhuc, phuclysupreme1010, PortManager
+TranHoangKhiem, khiemteacher, PortManager
+NguyenTuQuocThai, thainguyen, PortManager
