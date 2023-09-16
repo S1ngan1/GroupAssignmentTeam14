@@ -258,6 +258,138 @@ public class SystemAdmin {
             return false;
         }
     }
+    public boolean removeContainer() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the ContainerID to delete: ");
+        String containerIDToDelete = scanner.nextLine();
+
+        // Validate the input format using a regular expression
+        if (!Pattern.matches("^\\d+$", containerIDToDelete)) {
+            System.err.println("Invalid input format. Please use only digits for ContainerID.");
+            return false;
+        }
+
+        try {
+            // Read the file into memory while excluding the lines with the specified ContainerID
+            ArrayList<String> linesForListingPurpose = new ArrayList<>();
+            ArrayList<String> linesForContainer = new ArrayList<>();
+            BufferedReader readerForListingPurpose = new BufferedReader(new FileReader(ListingContainerFilePath));
+            BufferedReader readerForContainer = new BufferedReader(new FileReader(ContainerFilePath));
+
+            String lineForListingPurpose;
+            String lineForContainer;
+
+            boolean containerFound = false; // Flag to track if the container exists
+
+            while ((lineForListingPurpose = readerForListingPurpose.readLine()) != null) {
+                String[] parts = lineForListingPurpose.split(", ");
+                if (parts.length > 0 && !parts[0].equals(containerIDToDelete)) {
+                    linesForListingPurpose.add(lineForListingPurpose);
+                } else {
+                    containerFound = true;
+                }
+            }
+
+            while ((lineForContainer = readerForContainer.readLine()) != null) {
+                String[] parts = lineForContainer.split(", ");
+                if (parts.length > 0 && !parts[0].equals(containerIDToDelete)) {
+                    linesForContainer.add(lineForContainer);
+                }
+            }
+
+            readerForListingPurpose.close();
+            readerForContainer.close();
+
+            // If the container was not found, show an error message and return false
+            if (!containerFound) {
+                System.err.println("Container with ContainerID " + containerIDToDelete + " not found.");
+                return false;
+            }
+
+            // Write the remaining lines back to the respective files, effectively deleting the specified container
+            FileWriter writerForListingPurpose = new FileWriter(ListingContainerFilePath, false);
+            FileWriter writerForContainer = new FileWriter(ContainerFilePath, false);
+
+            for (String updatedLine : linesForListingPurpose) {
+                writerForListingPurpose.write(updatedLine + "\n");
+            }
+
+            for (String updatedLine : linesForContainer) {
+                writerForContainer.write(updatedLine + "\n");
+            }
+
+            writerForListingPurpose.close();
+            writerForContainer.close();
+
+            System.out.println("Container with ContainerID " + containerIDToDelete + " deleted successfully.");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to delete the container.");
+            return false;
+        }
+    }
+
+    public boolean removeVehicle() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the vehicle ID to delete: ");
+        String vehicleIDToDelete = scanner.nextLine();
+
+        // Validate the input format using a regular expression
+        if (!Pattern.matches("^(sh|tr)_\\d+$", vehicleIDToDelete)) {
+            System.err.println("Invalid input format. Please use the format 'sh_number' or 'tr_number'.");
+            return false;
+        }
+
+        String fileName = null;
+
+        if (vehicleIDToDelete.startsWith("sh_")) {
+            fileName = ShipFilePath;
+        } else if (vehicleIDToDelete.startsWith("tr_")) {
+            fileName = TruckFilePath;
+        } else {
+            System.err.println("Invalid vehicle type. Please use 'sh' for ship or 'tr' for truck.");
+            return false;
+        }
+
+        try {
+            // Read the file into memory while excluding the lines with the specified vehicle ID
+            ArrayList<String> lines = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            boolean vehicleFound = false; // Flag to track if the vehicle exists
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts.length > 0 && !parts[0].equals(vehicleIDToDelete)) {
+                    lines.add(line);
+                } else {
+                    vehicleFound = true;
+                }
+            }
+            reader.close();
+
+            // If the vehicle was not found, show an error message and return false
+            if (!vehicleFound) {
+                System.err.println("Vehicle with ID " + vehicleIDToDelete + " not found.");
+                return false;
+            }
+
+            // Write the remaining lines back to the file, effectively deleting the specified vehicle
+            FileWriter writer = new FileWriter(fileName, false);
+            for (String updatedLine : lines) {
+                writer.write(updatedLine + "\n");
+            }
+            writer.close();
+
+            System.out.println("Vehicle with ID " + vehicleIDToDelete + " deleted successfully.");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to delete the vehicle.");
+            return false;
+        }
+    }
 
     public boolean listPort() {
         try {

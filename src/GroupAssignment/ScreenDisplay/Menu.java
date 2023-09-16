@@ -65,10 +65,13 @@ public class Menu {
                                 System.out.println("5. List all the container");
                                 System.out.println("6. List all the vehicle");
                                 System.out.println("7. Remove a port: ");
-                                System.out.println("8. List all the trip from day A to day B or in any given day");
-                                System.out.println("9. Calculate distance between 2 ports");
-                                System.out.println("10. Back to the main system");
-                                System.out.println("11. Exit");
+                                System.out.println("8. Remove a vehicle: ");
+                                System.out.println("9. Remove a container: ");
+                                System.out.println("10. List all the trip from day A to day B or in any given day");
+                                System.out.println("11. Calculate distance between 2 ports");
+                                System.out.println("12. Managing activities inside the system");
+                                System.out.println("13. Back to the main system");
+                                System.out.println("14. Exit");
                                 adminChoice = scanner.nextInt(); // Read the choice here
 
                                 switch (adminChoice) {
@@ -94,23 +97,66 @@ public class Menu {
                                         admin.removePort();
                                         break;
                                     case 8:
+                                        admin.removeVehicle();
                                         break;
                                     case 9:
-                                        admin.calculateDistance();
+                                        admin.removeContainer();
                                         break;
                                     case 10:
-                                        System.out.println("Exiting the admin menu.");
                                         break;
                                     case 11:
+                                        admin.calculateDistance();
+                                        break;
+                                    case 12:
+                                        int portChoice;
+                                        while(true) {
+                                            System.out.println("Select an option:");
+                                            System.out.println("1. Port checking: ");
+                                            System.out.println("2. Vehicle checking: ");
+                                            System.out.println("3. Container checking ");
+                                            System.out.println("4. Back to the previous page");
+                                            System.out.println("5. Exit");
+                                            portChoice = scanner.nextInt();
+
+                                            switch (portChoice) {
+                                                case 1:
+
+                                                    break;
+                                                case 2:
+
+                                                    break;
+                                                case 3:
+
+                                                    break;
+                                                case 4:
+                                                    System.out.println("Back to the previous page.");
+                                                    break;
+                                                case 5:
+                                                    System.out.println("Exiting the program.");
+                                                    scanner.close();
+                                                    System.exit(0);
+                                                    break;
+                                                default:
+                                                    System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+                                            }
+                                            if (portChoice == 4) {
+                                                break; // Exit the inner loop when the admin chooses to exit
+                                            }
+                                        }
+                                        break;
+                                    case 13:
+                                        System.out.println("Exiting the admin menu.");
+                                        break;
+                                    case 14:
                                         System.out.println("Exiting the program.");
                                         scanner.close();
                                         System.exit(0);
                                         break;
                                     default:
-                                        System.out.println("Invalid choice. Please enter a number from 1 to 10.");
+                                        System.out.println("Invalid choice. Please enter a number from 1 to 14.");
                                 }
 
-                                if (adminChoice == 10) {
+                                if (adminChoice == 13) {
                                     break; // Exit the inner loop when the admin chooses to exit
                                 }
                             }
