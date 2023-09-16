@@ -1,7 +1,7 @@
-package Port;
+package GroupAssignment.Port;
 
-import Container.Container;
-import Vehicle.Vehicle;
+import GroupAssignment.Container.Container;
+import GroupAssignment.Vehicle.Vehicle;
 
 import java.io.Serializable;
 import java.util.ArrayList;

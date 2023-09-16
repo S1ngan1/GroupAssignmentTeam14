@@ -1,7 +1,7 @@
-package Vehicle;
+package GroupAssignment.Vehicle;
 
-import Container.Container;
-import Port.Port;
+import GroupAssignment.Container.Container;
+import GroupAssignment.Port.Port;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -1,5 +1,5 @@
-package Vehicle;
-import Vehicle.Vehicle;
+package GroupAssignment.Vehicle;
+import GroupAssignment.Vehicle.Vehicle;
 
 public class Ship extends Vehicle {
 

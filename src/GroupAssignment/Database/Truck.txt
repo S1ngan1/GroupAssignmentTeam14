@@ -1,12 +1,12 @@
 truckID, truckName, truckType, currentFuel, fuelCapacity, carryingCapacity, currentPort
-tr_101, Ford_F-150, , 66, 23, 690
-tr_102, Chevrolet_Colorado_ZR2, , 70, 21.1, 685
-tr_103, Toyota_Tacoma_TRD_Pro, , 75, 21.1, 581
-tr_104, Chevy_Silverdo, , 45, 25, 2034.2
-tr_105, Nissan_Titan, , 70, 31, 1028
-tr_106, Freightliner_Cascadia, , 75, 135, 8436.82
-tr_107, Peterbilt_389, , 81, 150, 5443.1
-tr_108, Kenworth_T680, , 66, 160, 8164,66
-tr_109, Volvo_VNL, , 91, 230, 10000
-tr_110, Mack_Anthem, , 68, 250, 10400
-
+tr_101, Ford_F-150, Basic, 66, 23, 690, p_1
+tr_102, Chevrolet_Colorado_ZR2, Tanker, 70, 21.1, 685, p_1
+tr_103, Toyota_Tacoma_TRD_Pro, Basic, 75, 21.1, 581, p_1
+tr_104, Chevy_Silverdo, Reefer, 45, 25, 2034.2, p_1
+tr_105, Nissan_Titan, Basic, 70, 31, 1028, p_2
+tr_106, Freightliner_Cascadia, Basic, 75, 135, 8436.82, p_2
+tr_107, Peterbilt_389, Basic, 81, 150, 5443.1, p_2
+tr_108, Kenworth_T680, Reefer, 66, 160, 8164,66, p_2
+tr_109, Volvo_VNL, Liquid, 91, 230, 10000, p_2
+tr_110, Mack_Anthem, Basic, 68, 250, 10400, p_2
+tr_111, National_Truck, Tanker, 5000.0, 70.0, 300.0, null

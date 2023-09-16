@@ -7,4 +7,5 @@ ContainerID, ContainerType, Weight
 6, Refrigerated, 100.0
 7, Liquid, 120.0
 8, Open Side, 100.0
+9, refrigerated, 92.0
 10, Open Top, 103.0

@@ -1,20 +1,22 @@
-package ScreenDisplay;
+package GroupAssignment.ScreenDisplay;
 
-import Port.Port;
-import Container.Container;
-import Vehicle.Vehicle;
+import GroupAssignment.Port.Port;
+import GroupAssignment.Container.Container;
+import GroupAssignment.Vehicle.Vehicle;
+import GroupAssignment.Vehicle.Ship;
+import GroupAssignment.Vehicle.Truck;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.FileWriter;
+import java.io.*;
 
 
 public class SystemAdmin {
     private String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
+    private String ListingContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\ContainerForListingPurpose.txt";
     private String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
 
     private String ShipFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Ship.txt";
@@ -69,13 +71,30 @@ public class SystemAdmin {
             return false;
         }
     }
-    public boolean addVehicle(){
+
+    public boolean addVehicle() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Creating a new vehicle");
-        System.out.print("Vehicle ID: ");
+        System.out.print("Vehicle ID (e.g., sh_number or tr_number): ");
         String v_ID = scanner.nextLine();
-        System.out.print("Vehicle Type: "); //not included in constructor
+        System.out.print("Vehicle Type (Ship or Truck): ");
         String v_type = scanner.nextLine();
+
+        // Validate the input format using a regular expression
+        if (!Pattern.matches("^(sh|tr)_\\d+$", v_ID)) {
+            System.err.println("Invalid input format for the vehicle ID. Please use 'sh_number' for ships or 'tr_number' for trucks.");
+            return false;
+        }
+
+        // Check if the ID and type match
+        if (v_ID.startsWith("sh") && !"Ship".equalsIgnoreCase(v_type)) {
+            System.err.println("Failed to create a vehicle. ID indicates a ship, but type is not 'Ship'.");
+            return false;
+        } else if (v_ID.startsWith("tr") && !"Truck".equalsIgnoreCase(v_type)) {
+            System.err.println("Failed to create a vehicle. ID indicates a truck, but type is not 'Truck'.");
+            return false;
+        }
+
         System.out.print("Vehicle Name: ");
         String v_name = scanner.nextLine();
         System.out.print("Current Fuel: ");
@@ -90,56 +109,65 @@ public class SystemAdmin {
         System.out.print("Current Port (null if sailaway): ");
         String v_port = scanner.nextLine();
 
-        vehicle = new Vehicle(v_ID, v_name, v_fuel, v_fc, v_cc, v_port);
-
-
-        if("Ship".equals(v_type)){
+        if ("Ship".equalsIgnoreCase(v_type)) {
+            Ship ship = new Ship(v_ID, v_name, v_cc, v_fuel, v_fc, v_port);
             try {
                 // Replace with the path to your existing text file.
                 // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
                 FileWriter writer = new FileWriter(ShipFilePath, true);
 
                 // Write the ship attributes as plain text
-                writer.write("\n"+ vehicle.getId()+", "+ vehicle.getName()+", "+vehicle.getCurrentFuel()+", "+vehicle.getFuelCapacity()+", "+vehicle.getCarryingCapacity()+", "+vehicle.getCurrentPort());
+                writer.write("\n" + ship.getId() + ", " + ship.getName() + ", " + ship.getCarryingCapacity() + ", " + ship.getCurrentFuel() + ", " + ship.getFuelCapacity() + ", " + ship.getCurrentPort());
 
                 // Close the FileWriter
                 writer.close();
 
-                //Print the success message
+                // Print the success message
                 System.out.println("Successfully created a new ship");
                 return true;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+                System.err.println("Failed to create a new ship.");
+                return false;
+            }
+        } else if ("Truck".equalsIgnoreCase(v_type)) {
+            System.out.print("Truck Type (Basic, Reefer, Tanker): ");
+            String truckType = scanner.nextLine();
+
+            Truck truck = new Truck(v_ID, v_name, truckType, v_cc, v_fuel, v_fc, v_port);
+
+            // Validate the truck type using the setTruckType method
+            if (!truck.setTruckType(truckType)) {
+                System.err.println("Invalid truck type. Please specify 'Basic', 'Reefer', or 'Tanker'.");
                 return false;
             }
 
-        }
-        else if("Truck".equals(v_type)){
             try {
                 // Replace with the path to your existing text file.
                 // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
                 FileWriter writer = new FileWriter(TruckFilePath, true);
 
-                // Write the ship attributes as plain text
-                writer.write("\n"+ vehicle.getId()+", "+ vehicle.getName()+", "+vehicle.getCurrentFuel()+", "+vehicle.getFuelCapacity()+", "+vehicle.getCarryingCapacity()+", "+vehicle.getCurrentPort());
+                // Write the truck attributes as plain text
+                writer.write("\n" + truck.getId() + ", " + truck.getName() + ", " + truck.getTruckType() + ", " + truck.getCarryingCapacity()+ ", " + truck.getCurrentFuel()+ ", " + truck.getFuelCapacity()+ ", " + truck.getCurrentPort());
+
                 // Close the FileWriter
                 writer.close();
 
-                //Print the success message
+                // Print the success message
                 System.out.println("Successfully created a new truck");
                 return true;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
+                System.err.println("Failed to create a new truck.");
                 return false;
             }
+        } else {
+            System.err.println("Invalid vehicle type. Please specify 'Ship' or 'Truck'.");
+            return false;
         }
-        else {
-            System.out.println("Failed to create vehicle");
-        }
-        return true;
     }
+
+
     public boolean addContainer(){
         // Add container information
         Scanner scanner = new Scanner(System.in);
@@ -158,13 +186,22 @@ public class SystemAdmin {
             try {
                 // Replace with the path to your existing text file.
                 // Open the file in append mode by creating a FileOutputStream with the 'true' parameter
-                FileWriter writer = new FileWriter(ContainerFilePath, true);
+                FileWriter writer1 = new FileWriter(ContainerFilePath, true);
 
                 // Write the container's attributes as plain text
-                writer.write("\n"+ container.getId()+", "+ container.getContainerType()+", "+container.getWeight());
+                writer1.write("\n"+ container.getId()+", "+ container.getContainerType()+", "+container.getWeight());
 
                 // Close the FileWriter
-                writer.close();
+                writer1.close();
+
+
+                FileWriter writer2 = new FileWriter(ListingContainerFilePath, true);
+
+                // Write the container's attributes as plain text
+                writer2.write("\n"+ container.getId()+", "+ container.getContainerType()+", "+container.getWeight());
+
+                // Close the FileWriter
+                writer2.close();
 
                 //Print the success message
                 System.out.println("Successfully created a new container");
@@ -181,6 +218,223 @@ public class SystemAdmin {
         }
         return true;
     }
+
+    public boolean removePort(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the port_ID to delete (e.g., p_number): ");
+        String portIDToDelete = scanner.nextLine();
+
+        // Validate the input format using a regular expression
+        if (!Pattern.matches("^p_\\d+$", portIDToDelete)) {
+            System.err.println("Invalid input format. Please use the format 'p_number' (e.g., p_1).");
+            return false;
+        }
+
+        try {
+            // Read the file into memory while excluding the lines with the specified port_ID
+            ArrayList<String> lines = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new FileReader(portFilePath));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts.length > 0 && !parts[0].equals(portIDToDelete)) {
+                    lines.add(line);
+                }
+            }
+            reader.close();
+
+            // Write the remaining lines back to the file, effectively deleting the specified port
+            FileWriter writer = new FileWriter(portFilePath, false);
+            for (String updatedLine : lines) {
+                writer.write(updatedLine + "\n");
+            }
+            writer.close();
+
+            System.out.println("Port with port_ID " + portIDToDelete + " deleted successfully.");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to delete the port.");
+            return false;
+        }
+    }
+
+    public boolean listPort() {
+        try {
+            // Open the file for reading.
+            BufferedReader reader = new BufferedReader(new FileReader(portFilePath));
+
+            // Define column widths for formatting.
+            int idWidth = 7;
+            int nameWidth = 17;
+            int longitudeWidth = 14;
+            int latitudeWidth = 13;
+            int capacityWidth = 16;
+            int landingAbilityWidth = 15;
+
+            // Print the header row.
+            System.out.println("===========================================LIST OF PORTS=============================================");
+            System.out.println();
+            System.out.println("-----------------------------------------------------------------------------------------------------");
+            System.out.printf("| %-"+idWidth+"s | %-"+nameWidth+"s | %-"+longitudeWidth+"s | %-"+latitudeWidth+"s | %-"+capacityWidth+"s | %-"+landingAbilityWidth+"s |\n", "port_ID", "port_name", "longitude", "latitude", "storageCapacity", "landingAbility");
+            System.out.println("-----------------------------------------------------------------------------------------------------");
+
+            String line;
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Skip the first line
+                }
+
+                String[] parts = line.split(", ");
+
+                if (parts.length == 6) {
+                    String portID = parts[0];
+                    String portName = parts[1];
+                    String longitude = parts[2];
+                    String latitude = parts[3];
+                    String storageCapacity = parts[4];
+                    String landingAbility = parts[5];
+
+                    // Print each row of port information.
+                    System.out.printf("| %-"+idWidth+"s | %-"+nameWidth+"s | %-"+longitudeWidth+"s | %-"+latitudeWidth+"s | %-"+capacityWidth+"s | %-"+landingAbilityWidth+"s |\n", portID, portName, longitude, latitude, storageCapacity, landingAbility);
+                }
+            }
+
+            // Print the footer.
+            System.out.println("-----------------------------------------------------------------------------------------------------");
+
+            // Close the file.
+            reader.close();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean listVehicle() {
+        try {
+            // Display the header
+            System.out.println("==============================================LIST OF VEHICLES====================================================");
+            System.out.println();
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+            System.out.println("| vehicleID |       vehicleName        | truckType | currentFuel | fuelCapacity | carryingCapacity | currentPort |");
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+            // Read and display ship data from "ship.txt"
+            BufferedReader shipReader = new BufferedReader(new FileReader(ShipFilePath));
+            String shipLine;
+            boolean skipShipHeader = true; // Flag to skip the header
+            while ((shipLine = shipReader.readLine()) != null) {
+                if (skipShipHeader) {
+                    skipShipHeader = false;
+                    continue; // Skip the header line
+                }
+                String[] shipParts = shipLine.split(", ");
+                if (shipParts.length >= 6) {
+                    String shipID = shipParts[0];
+                    String shipName = shipParts[1];
+                    String currentFuel = shipParts[2];
+                    String fuelCapacity = shipParts[3];
+                    String carryingCapacity = shipParts[4];
+                    String currentPort = shipParts[5];
+
+                    System.out.printf("| %-9s | %-24s |           | %-11s | %-12s | %-16s | %-11s |%n",
+                            shipID, shipName, currentFuel, fuelCapacity, carryingCapacity, currentPort);
+                }
+            }
+            shipReader.close();
+
+            // Read and display truck data from "truck.txt"
+            BufferedReader truckReader = new BufferedReader(new FileReader(TruckFilePath));
+            String truckLine;
+            boolean skipTruckHeader = true; // Flag to skip the header
+            while ((truckLine = truckReader.readLine()) != null) {
+                if (skipTruckHeader) {
+                    skipTruckHeader = false;
+                    continue; // Skip the header line
+                }
+                String[] truckParts = truckLine.split(", ");
+                if (truckParts.length >= 7) {
+                    String truckID = truckParts[0];
+                    String truckName = truckParts[1];
+                    String truckType = truckParts[2];
+                    String currentFuel = truckParts[3];
+                    String fuelCapacity = truckParts[4];
+                    String carryingCapacity = truckParts[5];
+                    String currentPort = truckParts[6];
+
+                    System.out.printf("| %-9s | %-24s | %-9s | %-11s | %-12s | %-16s | %-11s |%n",
+                            truckID, truckName, truckType, currentFuel, fuelCapacity, carryingCapacity, currentPort);
+                }
+            }
+            truckReader.close();
+
+            // Display the bottom horizontal line
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to list vehicles.");
+            return false;
+        }
+    }
+    public boolean listContainer() {
+        try {
+
+            // Open the file for reading.
+            BufferedReader reader = new BufferedReader(new FileReader(ListingContainerFilePath));
+
+            // Define column widths for formatting.10
+
+            int idWidth = 12;
+            int typeWidth = 15;
+            int weightWidth = 9;
+
+            // Print the header row.
+            System.out.println("=============LIST OF CONTAINERS===============");
+            System.out.println();
+            System.out.println("----------------------------------------------");
+            System.out.printf("| %-"+idWidth+"s | %-"+typeWidth+"s | %-"+weightWidth+"s |\n", "ContainerID", "ContainerType", "Weight");
+            System.out.println("----------------------------------------------");
+
+            String line;
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Skip the first line
+                }
+
+                String[] parts = line.split(", ");
+
+                if (parts.length == 3) {
+                    String containerID = parts[0];
+                    String containerType = parts[1];
+                    String weight = parts[2];
+
+                    // Print each row of container information.
+                    System.out.printf("| %-"+idWidth+"s | %-"+typeWidth+"s | %-"+weightWidth+"s |\n", containerID, containerType, weight);
+                }
+            }
+
+            // Print the footer.
+            System.out.println("----------------------------------------------");
+
+            // Close the file.
+            reader.close();
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean calculateDistance(){
         Scanner scanner = new Scanner(System.in);
 
@@ -208,7 +462,7 @@ public class SystemAdmin {
 
         return true;
     }
-    public double getLongitude(String firstPort, double longitude){
+    private double getLongitude(String firstPort, double longitude){
         boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(portFilePath))) {
             String line;
@@ -243,7 +497,7 @@ public class SystemAdmin {
         return longitude;
     }
 
-    public double getLatitude(String firstPort, double latitude){
+    private double getLatitude(String firstPort, double latitude){
         boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(portFilePath))) {
             String line;
