@@ -13,7 +13,7 @@ public class Port implements Serializable {
     private double Y;
     private double storingCapacity;
     private boolean landingAbility;
-
+    private double currentStoring;
     public ArrayList<Vehicle> vehicleHangar;
 
     private ArrayList<Container> containerHangar;
@@ -73,6 +73,18 @@ public class Port implements Serializable {
         }
     }
 
+    public boolean getLandingAbility() {
+        return landingAbility;
+    }
+
+    public double getCurrentStoring() {
+        return currentStoring;
+    }
+
+    public void setCurrentStoring(double currentStoring) {
+        this.currentStoring = currentStoring;
+    }
+
     public ArrayList<Vehicle> getVehicleHangar() {
         return vehicleHangar;
     }
@@ -96,10 +108,6 @@ public class Port implements Serializable {
     public void setTripRecord(ArrayList<Trip> tripRecord) {
         this.tripRecord = tripRecord;
     }*/
-
-    public boolean getLandingAbility() {
-        return landingAbility;
-    }
 
     public void setLandingAbility(boolean landingAbility) {
         this.landingAbility = landingAbility;

@@ -1,4 +1,4 @@
-truckID, truckName, truckType, currentFuel, fuelCapacity, carryingCapacity, currentPort
+truckID, truckName, type, currentFuel, fuelCapacity, carryingCapacity, currentPort
 tr_101, Ford_F-150, Basic, 66, 23, 690, p_1
 tr_102, Chevrolet_Colorado_ZR2, Tanker, 70, 21.1, 685, p_2
 tr_103, Toyota_Tacoma_TRD_Pro, Basic, 75, 21.1, 581, p_1

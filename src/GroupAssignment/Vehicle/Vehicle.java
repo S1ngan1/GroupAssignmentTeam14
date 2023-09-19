@@ -2,6 +2,7 @@ package GroupAssignment.Vehicle;
 
 import GroupAssignment.Container.Container;
 import GroupAssignment.Port.Port;
+import GroupAssignment.ScreenDisplay.SystemAdmin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,11 +14,13 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Vehicle {
-    private String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
-    private String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
+    private static String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
+    private static String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
     //A vehicle has a name, id, and a carrier which hold a number of containers
     private String name;
     private String id;
+
+    private String type;
     private double carryingCapacity;
     private double currentFuel;
     private double fuelCapacity;
@@ -29,13 +32,14 @@ public class Vehicle {
 
     private Container unloadedContainer = null;
 
-    public Vehicle(String id, String name, double carryingCapacity, double currentFuel, double fuelCapacity, String currentPort) {
+    public Vehicle(String id, String name, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort) {
         //There is no parameter for carrier here. Every new vehicle has an empty carrier which is essentially an ArrayList
         this.id = id;
         this.name = name;
-        this.carryingCapacity = carryingCapacity;
+        this.type = type;
         this.currentFuel = currentFuel;
         this.fuelCapacity = fuelCapacity;
+        this.carryingCapacity = carryingCapacity;
         this.currentPort = currentPort;
         this.totalWeight = 0;
         this.carrier = new ArrayList<Container>();
@@ -92,8 +96,21 @@ public class Vehicle {
     //If a container is found in the container list and the vehicle is still able to carry
     // the piles of container, it will add that container to the vehicle's carrier
     // I've made it so that it will not add the same container twice
+
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
+    }
+
+    public ArrayList<Container> getCarrier() {
+        return carrier;
+    }
+
     public boolean loadContainer() {
-        //if container totalWeight + container weight <= carryingCapacity
+        // If container totalWeight + container weight <= carryingCapacity
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the container to load");
         System.out.print("Container ID: ");
@@ -105,9 +122,18 @@ public class Vehicle {
 
         // Read data from the text file
         ArrayList<String> lines = new ArrayList<>();
+        boolean firstLine = true; // Flag to track the first line (header)
+
         try (BufferedReader reader = new BufferedReader(new FileReader(ContainerFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    // Keep the first line (header)
+                    lines.add(line);
+                    firstLine = false;
+                    continue;
+                }
+
                 String[] parts = line.split(",\\s+"); // Use regex to split by comma and optional spaces
                 if (parts.length == 3) {
                     String id = parts[0].trim();
@@ -116,50 +142,60 @@ public class Vehicle {
 
                     Container container = new Container(id, containerType, weight);
 
-                    // Check if the current container matches the search ID & the vehicle still able to carry the next container
+                    // Check if the current container matches the search ID & the vehicle is still able to carry the next container
                     if (id.equals(searchID) && totalWeight + container.getWeight() <= carryingCapacity) {
                         carrier.add(container); // Add the found container to the list
                         found = true;
                         System.out.println("Container added ");
                         totalWeight += weight;
-                    }
-                    else{
+                    } else {
                         lines.add(line);
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return false; // Return false in case of an exception
         }
-        if (found){
+
+        if (found) {
+            ArrayList<String> updatedLines = new ArrayList<>();
+            for (String line : lines) {
+                if (!line.startsWith(searchID + ",")) {
+                    updatedLines.add(line);
+                }
+            }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(ContainerFilePath))) {
-                for (String line : lines) {
+                for (String line : updatedLines) {
                     writer.write(line);
                     writer.newLine();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return false; // Return false if writing fails
             }
-        }
-        else {
+        } else {
             System.out.println("Failed to add container");
+            return false; // Return false if the container is not found or cannot be added
         }
-        return true;
+
+        return true; // Return true if the container is successfully loaded
     }
+
+
     //unloading the containers if there is one. Avoiding duplicate ID
-    public boolean unloadContainer(Port currentPort) {
-        boolean successfullyUnloaded = true;
+    public boolean unloadContainer() {
+        // Telling the ID of the container to be removed
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Unloading container ID: ");
+        int ID = scanner.nextInt();
+        scanner.nextLine();
 
-        // If there are containers to be removed
-        if (carrier.size() > 0) {
-            // Telling the ID of the container to be removed
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Unloading container ID: ");
-            int ID = scanner.nextInt();
-            scanner.nextLine();
-            // Unloading the container with the aforementioned ID
-            String searchID = Integer.toString(ID);
+        String searchID = Integer.toString(ID);
+        boolean successfullyUnloaded = false;
 
+        // Check if the carrier is not empty
+        if (!carrier.isEmpty()) {
             Iterator<Container> iterator = carrier.iterator();
             while (iterator.hasNext()) {
                 Container container = iterator.next();
@@ -167,47 +203,42 @@ public class Vehicle {
                     unloadedContainer = container;
                     totalWeight -= container.getWeight();
                     iterator.remove(); // Remove the container
+                    successfullyUnloaded = true;
                     break;
                 }
             }
 
             // Check if a container was found and unloaded
             if (unloadedContainer != null) {
-                // Use the provided currentPort instead of creating a new one
-                if (currentPort != null) {
-                    // Write the container information into container.txt
-                    try {
-                        // Open the file in append mode by creating a FileWriter with the 'true' parameter
-                        FileWriter writer = new FileWriter(ContainerFilePath, true);
+                if (Math.abs(totalWeight) < 1e-10) {
+                    totalWeight = 0.0;
+                }
+                // Write the container information into container.txt
+                try {
+                    // Open the file in append mode by creating a FileWriter with the 'true' parameter
+                    FileWriter writer = new FileWriter(ContainerFilePath, true);
 
-                        // Write the container's attributes as plain text
-                        writer.write("\n" + unloadedContainer.getId() + ", " + unloadedContainer.getContainerType() + ", " + unloadedContainer.getWeight());
+                    // Write the container's attributes as plain text
+                    writer.write("\n" + unloadedContainer.getId() + ", " + unloadedContainer.getContainerType() + ", " + unloadedContainer.getWeight());
 
-                        // Close the FileWriter
-                        writer.close();
+                    // Close the FileWriter
+                    writer.close();
 
-                        // Insert the container into the port's containerHangar
-                        currentPort.moveContainerToPortStorage(unloadedContainer);
-                        System.out.println("Container unloaded and moved to " + currentPort.getP_ID());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        successfullyUnloaded = false;
-                    }
-                } else {
-                    System.out.println("No container to add to port");
+                    System.out.println("Container unloaded.");
+                } catch (IOException e) {
+                    e.printStackTrace();
                     successfullyUnloaded = false;
                 }
             } else {
-                System.out.println("Container with ID " + searchID + " not found.");
-                successfullyUnloaded = false;
+                System.out.println("Container with ID " + searchID + " not found in the carrier.");
             }
         } else {
-            System.out.println("There is no container to be unloaded");
-            successfullyUnloaded = false;
+            System.out.println("There are no containers to be unloaded.");
         }
 
         return successfullyUnloaded;
     }
+
 
     public Port createPortFromID(String currentPort) {
 
@@ -245,18 +276,26 @@ public class Vehicle {
     //Determining whether the vehicle can ship the containers to another port or not
     // Move the vehicle only if it is verified for transportation
     // I just made it moved to another port freely with no constraint. Update expected
-    public boolean moveVehicle(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter vehicle ID: ");
-        String vID = scanner.nextLine();
+
+    public boolean moveVehicle(Scanner scanner){
         System.out.print("Move to port number: ");
         int destinationPort = scanner.nextInt();
         scanner.nextLine();
 
-        setCurrentPort(String.valueOf(destinationPort));
-        return true;
+        for(Container container : carrier){
+            if (container.getWeight() + SystemAdmin.portList.get(destinationPort-1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort-1).getStoringCapacity()){
+                setCurrentPort(SystemAdmin.portList.get(destinationPort-1).getP_ID());
+                System.out.println(SystemAdmin.portList.get(destinationPort-1).getCurrentStoring());
+                return true;
+
+            }
+            System.out.println("Cannot transport the vehicle to the designated port");
+            return false;
         }
 
+        setCurrentPort("p_" + destinationPort);
+        return true;
+        }
     //Display the general number of container
     public String displayGeneralNumberOfContainer(){
         return "Number of container: " + carrier.size();
@@ -267,9 +306,10 @@ public class Vehicle {
         return "Vehicle{" +
                 " id = '" + id + '\'' +
                 ", name = '" + name + '\'' +
-                ", carryingCapacity = " + carryingCapacity +
+                ", type = '"  + type + '\'' +
                 ", currentFuel = " + currentFuel +
                 ", fuelCapacity = " + fuelCapacity +
+                ", carryingCapacity = " + carryingCapacity +
                 ", currentPort = " + currentPort +
                 ", totalWeight = " + totalWeight +
                 '}';

@@ -7,10 +7,15 @@ import java.util.Scanner;
 import GroupAssignment.ScreenDisplay.Account;
 import GroupAssignment.ScreenDisplay.Menu;
 import GroupAssignment.ScreenDisplay.SystemAdmin;
+import GroupAssignment.Port.Port;
+import GroupAssignment.Vehicle.Vehicle;
+import GroupAssignment.Vehicle.Ship;
+import GroupAssignment.Vehicle.Truck;
 
 import java.io.IOException;
 import java.text.ParseException;
 public class Menu {
+
 
     public void mainMenu() throws IOException, InterruptedException, ParseException {
         System.out.println("================================");
@@ -19,7 +24,7 @@ public class Menu {
         System.out.println("Instructor: Mr. Tom Huynh & Dr. Phong Ngo");
         System.out.println("Group: Group 14");
         System.out.println("S3976250, Ly Minh Phuc");
-        System.out.println("S3966954 , Tran Hoang Khiem");
+        System.out.println("S3966954, Tran Hoang Khiem");
         System.out.println("S3957050, Nguyen Tu Quoc Thai");
     }
     public void startMenu(){
@@ -51,6 +56,8 @@ public class Menu {
                             System.out.println("Login successfully.");
                             //Create a new SystemAdmin instance on the server
                             SystemAdmin admin = new SystemAdmin();
+                            ArrayList<Port> currentPortList = SystemAdmin.portList;
+                            HashMap<String, Vehicle> currentVehicleList = SystemAdmin.vehicleList;
                             stillLoggedIn = false;
 
                             int adminChoice; // Declare adminChoice outside the loop
@@ -108,28 +115,135 @@ public class Menu {
                                         admin.calculateDistance();
                                         break;
                                     case 12:
-                                        int portChoice;
+                                        int navigateChoice;
                                         while(true) {
+                                            System.out.println("=======SYSTEM NAVIGATING========");
                                             System.out.println("Select an option:");
                                             System.out.println("1. Port checking: ");
                                             System.out.println("2. Vehicle checking: ");
                                             System.out.println("3. Container checking ");
                                             System.out.println("4. Back to the previous page");
                                             System.out.println("5. Exit");
-                                            portChoice = scanner.nextInt();
+                                            navigateChoice = scanner.nextInt();
 
-                                            switch (portChoice) {
+                                            switch (navigateChoice) {
                                                 case 1:
+                                                    int portChoice;
+                                                    System.out.print("Select the port you want to check: ");
+                                                    portChoice = scanner.nextInt();
+                                                    scanner.nextLine();
 
+                                                    if(admin.checkPort(portChoice)){
+                                                        int portNChoice;
+                                                        while(true){
+                                                            System.out.println("=======WELCOME TO PORT "+portChoice+"========");
+                                                            System.out.println("Select an option:");
+                                                            System.out.println("1. List all the container: ");
+                                                            System.out.println("2. List all the vehicle: ");
+                                                            System.out.println("3. Change the attribute: ");
+                                                            System.out.println("4. Back to the previous page ");
+                                                            System.out.println("5. Exit ");
+                                                            portNChoice = scanner.nextInt();
+
+                                                            switch(portNChoice){
+                                                                case 1:
+                                                                    break;
+                                                                case 2:
+                                                                    break;
+                                                                case 3:
+                                                                    break;
+                                                                case 4: //Back to the previous page
+                                                                    break;
+                                                                case 5:
+                                                                    System.out.println("Exiting the program.");
+                                                                    scanner.close();
+                                                                    System.exit(0);
+                                                                    break;
+                                                                default:
+                                                                    System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+                                                            }
+                                                            if (portNChoice == 4) {
+                                                                break; // Exit the inner loop when the admin chooses to exit
+                                                            }
+                                                        }
+                                                    }
+                                                    else{
+                                                        System.out.println("Port is not available");
+                                                    }
                                                     break;
-                                                case 2:
 
+                                                case 2:
+                                                    int vehicleChoice;
+                                                    String vehicleType;
+                                                    System.out.print("Select the vehicle you want to check: ");
+                                                    vehicleChoice = scanner.nextInt();
+                                                    scanner.nextLine();
+                                                    System.out.print("Vehicle type: ");
+                                                    vehicleType = scanner.nextLine();
+
+                                                    if(admin.checkVehicle(vehicleChoice, vehicleType)){
+                                                        int vehicleNChoice;
+                                                        while(true) {
+                                                            System.out.println("=======WELCOME TO "+vehicleType.toUpperCase() +" "+ vehicleChoice + " DASHB0ARD========");
+                                                            System.out.println("Select an option:");
+                                                            System.out.println("1. Load a container");
+                                                            System.out.println("2. Unload a container");
+                                                            System.out.println("3. Move to another port");
+                                                            System.out.println("4. Refuel");
+                                                            System.out.println("5. Back to the previous page");
+                                                            System.out.println("6. Exit");
+                                                            vehicleNChoice = scanner.nextInt();
+
+                                                            String prefix;
+                                                            if (vehicleChoice >= 300) {
+                                                                prefix = "sh_";
+                                                            } else if (vehicleChoice >= 100) {
+                                                                prefix = "tr_";
+                                                            } else {
+                                                                System.out.println("Invalid input.");
+                                                                return;
+                                                            }
+
+                                                            // Create the key by concatenating the prefix and user input
+                                                            String key = prefix + vehicleChoice;
+
+                                                            switch(vehicleNChoice){
+                                                                case 1:
+                                                                    // Retrieve the value associated with the key from the HashMap
+                                                                    currentVehicleList.get(key).loadContainer();
+                                                                    System.out.println(currentVehicleList.get(key));
+                                                                    break;
+                                                                case 2:
+                                                                    currentVehicleList.get(key).unloadContainer();
+                                                                    System.out.println(currentVehicleList.get(key));
+
+                                                                    break;
+                                                                case 3:
+                                                                    break;
+                                                                case 4:
+                                                                    break;
+                                                                case 5: //Back to the previous page
+                                                                    break;
+                                                                case 6:
+                                                                    System.out.println("Exiting the program.");
+                                                                    scanner.close();
+                                                                    System.exit(0);
+                                                                    break;
+                                                                default:
+                                                                    System.out.println("Invalid choice. Please enter a number from 1 to 6.");
+                                                            }
+                                                            if (vehicleNChoice == 5){
+                                                                break; // Exit the inner loop when the admin chooses to exit
+                                                            }
+                                                        }
+                                                    }
+                                                    else{
+                                                        System.out.println("Vehicle is not available");
+                                                    }
                                                     break;
                                                 case 3:
-
                                                     break;
-                                                case 4:
-                                                    System.out.println("Back to the previous page.");
+                                                case 4:  //back to the previous page
                                                     break;
                                                 case 5:
                                                     System.out.println("Exiting the program.");
@@ -139,13 +253,12 @@ public class Menu {
                                                 default:
                                                     System.out.println("Invalid choice. Please enter a number from 1 to 5.");
                                             }
-                                            if (portChoice == 4) {
+                                            if (navigateChoice == 4) {
                                                 break; // Exit the inner loop when the admin chooses to exit
                                             }
                                         }
                                         break;
-                                    case 13:
-                                        System.out.println("Exiting the admin menu.");
+                                    case 13: //Back to the previous page
                                         break;
                                     case 14:
                                         System.out.println("Exiting the program.");
