@@ -285,6 +285,7 @@ public class Vehicle {
         for (Container container : carrier) {
             if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity()) {
                 setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
+                System.out.println("Vehicle moved to port "+destinationPort);
                 return true;
             }
         }
