@@ -1,5 +1,7 @@
 package GroupAssignment.Vehicle;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -7,6 +9,7 @@ import java.util.Iterator;
 
 import GroupAssignment.Container.Container;
 import GroupAssignment.Port.Port;
+import GroupAssignment.ScreenDisplay.SystemAdmin;
 import GroupAssignment.Vehicle.Vehicle;
 
 public class Truck extends Vehicle {
@@ -180,7 +183,42 @@ public class Truck extends Vehicle {
         }
     }
 
+    @Override
+    public boolean moveVehicle(Scanner scanner) {
+        System.out.print("Move to port number: ");
+        int destinationPort = scanner.nextInt();
+        scanner.nextLine();
 
+        for (Container container : carrier) {
+            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && (SystemAdmin.portList.get(destinationPort-1).getLandingAbility() && SystemAdmin.portList.get(extractPortNumber(super.getCurrentPort())-1).getLandingAbility())){
+                setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
+                System.out.println("Vehicle moved to port "+destinationPort);
+                return true;
+            }
+        }
+        System.out.println("Cannot transport the vehicle to the designated port");
+        return false;
+    }
+
+    private static int extractPortNumber(String portId) {
+        // Define a regular expression pattern to match the number after "p_"
+        Pattern pattern = Pattern.compile("p_(\\d+)");
+
+        // Create a Matcher object and apply the pattern to the input string
+        Matcher matcher = pattern.matcher(portId);
+
+        // Check if the pattern matches
+        if (matcher.matches()) {
+            // Extract the number group (group 1) from the matched result
+            String numberStr = matcher.group(1);
+
+            // Convert the extracted number string to an integer
+            return Integer.parseInt(numberStr);
+        } else {
+            // Return -1 or throw an exception to indicate that the pattern did not match
+            throw new IllegalArgumentException("Invalid port ID format: " + portId);
+        }
+    }
 
     @Override
     public String toString() {

@@ -216,9 +216,10 @@ public class Menu {
                                                                 case 2:
                                                                     currentVehicleList.get(key).unloadContainer();
                                                                     System.out.println(currentVehicleList.get(key));
-
                                                                     break;
                                                                 case 3:
+                                                                    currentVehicleList.get(key).moveVehicle(scanner);
+                                                                    System.out.println(currentVehicleList.get(key));
                                                                     break;
                                                                 case 4:
                                                                     break;

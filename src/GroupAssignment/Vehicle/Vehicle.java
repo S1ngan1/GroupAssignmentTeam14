@@ -277,25 +277,20 @@ public class Vehicle {
     // Move the vehicle only if it is verified for transportation
     // I just made it moved to another port freely with no constraint. Update expected
 
-    public boolean moveVehicle(Scanner scanner){
+    public boolean moveVehicle(Scanner scanner) {
         System.out.print("Move to port number: ");
         int destinationPort = scanner.nextInt();
         scanner.nextLine();
 
-        for(Container container : carrier){
-            if (container.getWeight() + SystemAdmin.portList.get(destinationPort-1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort-1).getStoringCapacity()){
-                setCurrentPort(SystemAdmin.portList.get(destinationPort-1).getP_ID());
-                System.out.println(SystemAdmin.portList.get(destinationPort-1).getCurrentStoring());
+        for (Container container : carrier) {
+            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity()) {
+                setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
                 return true;
-
             }
-            System.out.println("Cannot transport the vehicle to the designated port");
-            return false;
         }
-
-        setCurrentPort("p_" + destinationPort);
-        return true;
-        }
+        System.out.println("Cannot transport the vehicle to the designated port");
+        return false;
+    }
     //Display the general number of container
     public String displayGeneralNumberOfContainer(){
         return "Number of container: " + carrier.size();

@@ -16,23 +16,21 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
-        /*Menu menu = new Menu();
+        Menu menu = new Menu();
         menu.mainMenu();
         System.out.println();
-        menu.startMenu();*/
-        Scanner scanner = new Scanner(System.in);
+        menu.startMenu();
+/*        Scanner scanner = new Scanner(System.in);
         Truck truck1 = new Truck("tr_101", "Ford_F-150", "Basic", 66, 23, 690, "p_1");
         Ship ship2 = new Ship("sh_102", "Chevrolet_Colorado_ZR2", "ship", 70, 21.1, 685, "p_5");
 
 
-        SystemAdmin.portList.get(1).setCurrentStoring(12499);
-
-        ship2.loadContainer();
-        for(Container container : ship2.getCarrier()){
+        truck1.loadContainer();
+        for(Container container : truck1.getCarrier()){
             System.out.println(container);
         }
-        ship2.moveVehicle(scanner);
-        System.out.println(ship2);
+        truck1.moveVehicle(scanner);
+        System.out.println(truck1);*/
     }
 }
 
