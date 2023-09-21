@@ -8,12 +8,13 @@ import java.util.Scanner;
 import java.util.Iterator;
 
 import GroupAssignment.Container.Container;
+import GroupAssignment.FilePaths.FilePaths;
 import GroupAssignment.Port.Port;
 import GroupAssignment.ScreenDisplay.SystemAdmin;
 import GroupAssignment.Vehicle.Vehicle;
 
 public class Truck extends Vehicle {
-    private static final String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
+    private static final String ContainerFilePath = FilePaths.ContainerFilePath;
     private String type;
 
     private double totalWeight; //not an atrribute in the constructor
@@ -21,7 +22,7 @@ public class Truck extends Vehicle {
     private String currentPort; //not included in constructor
 
     private Container unloadedContainer = null;
-    public Truck (String name, String id, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort ){
+    public Truck (String id, String name, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort ){
         super(name, id, type, carryingCapacity, currentFuel, fuelCapacity, currentPort);
         this.totalWeight = 0;
         this.carrier = new ArrayList<Container>();
@@ -192,7 +193,10 @@ public class Truck extends Vehicle {
         for (Container container : carrier) {
             if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && (SystemAdmin.portList.get(destinationPort-1).getLandingAbility() && SystemAdmin.portList.get(extractPortNumber(super.getCurrentPort())-1).getLandingAbility())){
                 setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
+                SystemAdmin.portList.get(destinationPort - 1).getVehicleHangar().add(SystemAdmin.vehicleList.get(super.getId()));
+                SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getVehicleHangar().remove(SystemAdmin.vehicleList.get(super.getId()));
                 System.out.println("Vehicle moved to port "+destinationPort);
+
                 return true;
             }
         }
@@ -200,25 +204,7 @@ public class Truck extends Vehicle {
         return false;
     }
 
-    private static int extractPortNumber(String portId) {
-        // Define a regular expression pattern to match the number after "p_"
-        Pattern pattern = Pattern.compile("p_(\\d+)");
 
-        // Create a Matcher object and apply the pattern to the input string
-        Matcher matcher = pattern.matcher(portId);
-
-        // Check if the pattern matches
-        if (matcher.matches()) {
-            // Extract the number group (group 1) from the matched result
-            String numberStr = matcher.group(1);
-
-            // Convert the extracted number string to an integer
-            return Integer.parseInt(numberStr);
-        } else {
-            // Return -1 or throw an exception to indicate that the pattern did not match
-            throw new IllegalArgumentException("Invalid port ID format: " + portId);
-        }
-    }
 
     @Override
     public String toString() {

@@ -1,10 +1,10 @@
 package GroupAssignment.ScreenDisplay;
 
+import GroupAssignment.Interface.*;
 import GroupAssignment.Port.Port;
 import GroupAssignment.Container.Container;
-import GroupAssignment.Vehicle.Vehicle;
-import GroupAssignment.Vehicle.Ship;
-import GroupAssignment.Vehicle.Truck;
+import GroupAssignment.Vehicle.*;
+import GroupAssignment.FilePaths.FilePaths;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -15,13 +15,14 @@ import java.util.regex.Pattern;
 import java.io.*;
 
 
-public class SystemAdmin {
-    private static final String ContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Container.txt";
-    private static final String ListingContainerFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\ContainerForListingPurpose.txt";
-    private static final String portFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Port.txt";
+public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin, ListingForSystemAdmin, CheckingForSystemAdmin, CalculateDistance {
 
-    private static final String ShipFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Ship.txt";
-    private static final String TruckFilePath = "C:\\Users\\Admin\\IdeaProjects\\GroupProjectTeam14\\src\\GroupAssignment\\Database\\Truck.txt";
+    public static final String ContainerFilePath = FilePaths.ContainerFilePath;
+    public static final String ListingContainerFilePath = FilePaths.ListingContainerFilePath;
+    public static final String portFilePath = FilePaths.portFilePath;
+
+    public static final String ShipFilePath = FilePaths.ShipFilePath;
+    public static final String TruckFilePath = FilePaths.TruckFilePath;
     private Port port;
 
     private Container container;
@@ -808,7 +809,6 @@ public class SystemAdmin {
             return false;
         }
     }
-
 
     public boolean calculateDistance(){
         Scanner scanner = new Scanner(System.in);

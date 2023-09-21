@@ -1,21 +1,18 @@
+//Additional step for role: 0: SystemAdmin, 1: PortManager
+
 package GroupAssignment.ScreenDisplay;
 
 import java.util.*;
 import java.io.*;
 import java.util.Scanner;
 
-import GroupAssignment.ScreenDisplay.Account;
-import GroupAssignment.ScreenDisplay.Menu;
-import GroupAssignment.ScreenDisplay.SystemAdmin;
+import GroupAssignment.Interface.Account;
 import GroupAssignment.Port.Port;
-import GroupAssignment.Vehicle.Vehicle;
-import GroupAssignment.Vehicle.Ship;
-import GroupAssignment.Vehicle.Truck;
+import GroupAssignment.Vehicle.*;
 
 import java.io.IOException;
 import java.text.ParseException;
 public class Menu {
-
 
     public void mainMenu() throws IOException, InterruptedException, ParseException {
         System.out.println("================================");
@@ -149,6 +146,7 @@ public class Menu {
                                                                 case 1:
                                                                     break;
                                                                 case 2:
+                                                                    currentPortList.get(portChoice-1).listVehicleInPort();
                                                                     break;
                                                                 case 3:
                                                                     break;

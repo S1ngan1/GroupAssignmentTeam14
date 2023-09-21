@@ -117,10 +117,33 @@ public class Port implements Serializable {
     public boolean vehicleDepature(){
         return true;
     }
-    public boolean vehicleArrival(){
-        //Vehicle vehicle = new Vehicle();
+    public void listVehicleInPort() {
+        // Check if the ArrayList is empty
+        if (vehicleHangar.isEmpty()) {
+            System.out.println("There is no vehicle to be displayed");
+            return;
+        }
 
-        return true;
+        // Print the header
+        System.out.println("========================================LIST OF VEHICLES IN THE PORT==============================================");
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
+        System.out.println("| vehicleID |       vehicleName        | vehicleType | currentFuel | fuelCapacity | carryingCapacity | currentPort |");
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
+
+        // Iterate through the ArrayList and print each vehicle's information
+        for (Vehicle vehicle : vehicleHangar) {
+            System.out.printf("| %-10s| %-25s| %-12s| %-11.2f | %-12.2f | %-18.2f| %-11s|\n",
+                    vehicle.getId(),
+                    vehicle.getName(),
+                    vehicle.getType(),
+                    vehicle.getCurrentFuel(),
+                    vehicle.getFuelCapacity(),
+                    vehicle.getCarryingCapacity(),
+                    vehicle.getCurrentPort());
+        }
+
+        // Print the footer
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
     }
 
     public boolean moveContainerToPortStorage(Container container){
