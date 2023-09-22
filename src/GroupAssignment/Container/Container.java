@@ -58,6 +58,7 @@ public class Container {
         this.weight = weight;
     }
 
+    //FUEL CONSUMPTION OF CONTAINER WHEN PLACED ON A SHIP
     public static HashMap<String, Double> getShip_Container() {
         ship_Container.put("Dry Storage", 3.5);
         ship_Container.put("Open Top", 2.8);
@@ -71,6 +72,7 @@ public class Container {
         Container.ship_Container = ship_Container;
     }
 
+    //FUEL CONSUMPTION OF CONTAINER WHEN PLACED ON A TRUCK
     public static HashMap<String, Double> getTruck_Container() {
         truck_Container.put("Dry Storage", 4.6);
         truck_Container.put("Open Top", 3.2);

@@ -23,7 +23,7 @@ public class Truck extends Vehicle {
     private double totalFuelConsumption;
     private Container unloadedContainer = null;
 
-    private double truckInitialFuelConsumption = 0.2; //Truck will consume 25 gallons per km
+    private double truckInitialFuelConsumption = 0.2; //Truck will consume 0.2 gallons per km
     public Truck (String id, String name, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort ){
         super(id, name, type, currentFuel, fuelCapacity, carryingCapacity, currentPort);
         setType(type);

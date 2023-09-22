@@ -23,4 +23,10 @@ ContainerID, ContainerType, Weight
 22, Open Side, 6300
 23, Open Side, 6000
 24, Open Side, 12000
+25, Refrigerated, 4500
+26, Refrigerated, 8000
+27, Refrigerated, 6000
+28, Refrigerated, 9000
+29, Refrigerated, 7500
+30, Refrigerated, 6500
 

@@ -1,5 +1,8 @@
 Username, password, role
-MinhVuHuynh, huynhvuminh123, SystemAdmin
-LyMinhPhuc, phuclysupreme1010, PortManager
-TranHoangKhiem, khiemteacher, PortManager
-NguyenTuQuocThai, thainguyen, PortManager
+MinhVuThanh, vuminhthanh123, 0
+LyMinhPhuc, phuclysupreme1010, 1
+TranHoangKhiem, khiemteacher, 1
+NguyenTuQuocThai, thainguyen, 1
+LePhucThinh, thinhledropcoursegod, 1
+NguyenHoangThienPhuc, goodlecturer, 1
+

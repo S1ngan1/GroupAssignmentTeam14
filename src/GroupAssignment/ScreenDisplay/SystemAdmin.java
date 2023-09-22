@@ -24,7 +24,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
     public static final String ShipFilePath = FilePaths.ShipFilePath;
     public static final String TruckFilePath = FilePaths.TruckFilePath;
 
-    public static double
+    public static double totalFuelUsedInADay;
     private Port port;
 
     private Container container;
