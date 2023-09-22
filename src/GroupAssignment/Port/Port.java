@@ -18,7 +18,7 @@ public class Port implements Serializable {
 
     private ArrayList<Container> containerHangar;
 
-    //private ArrayList<Trip> tripRecord;
+    //private ArrayList<GroupAssignment.Trip> tripRecord;
 
     public Port(String port_ID, String port_name, double X, double Y, double storingCapacity, boolean landingAbility){
         this.port_ID = port_ID;
@@ -101,11 +101,11 @@ public class Port implements Serializable {
         this.containerHangar = containerHangar;
     }
 
-    /*public ArrayList<Trip> getTripRecord() {
+    /*public ArrayList<GroupAssignment.Trip> getTripRecord() {
         return tripRecord;
     }
 
-    public void setTripRecord(ArrayList<Trip> tripRecord) {
+    public void setTripRecord(ArrayList<GroupAssignment.Trip> tripRecord) {
         this.tripRecord = tripRecord;
     }*/
 
