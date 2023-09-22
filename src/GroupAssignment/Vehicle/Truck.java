@@ -157,6 +157,7 @@ public class Truck extends Vehicle {
             if (container.getId().equals(searchID)) {
                 unloadedContainer = container;
                 totalWeight -= container.getWeight();
+                carrier.remove(container);
                 iterator.remove(); // Remove the container
                 successfullyUnloaded = true;
                 truckInitialFuelConsumption -= Container.getShip_Container().get(container.getContainerType());

@@ -7,6 +7,7 @@ import GroupAssignment.ScreenDisplay.SystemAdmin;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -141,11 +142,34 @@ public class Vehicle {
     }
     //Display the general number of container
     public boolean displayGeneralNumberOfContainer(){
-        System.out.println("Number of container: " + carrier.size());
+        System.out.println("Number of container: " + getCarrier().size());
         return true;
     }
+    public boolean displayContainerReport(ArrayList<Container> containers) {
+        // Create a map to count the occurrences of each container type
+        HashMap<String, Integer> containerCounts = new HashMap<>();
 
+        for (Container container : containers) {
+            String containerType = container.getContainerType();
+            containerCounts.put(containerType, containerCounts.getOrDefault(containerType, 0) + 1);
+        }
 
+        // Print the table header
+        System.out.println("========CARRIER TABLE=========");
+        System.out.println("-----------------------------------");
+        System.out.printf("| %-13s | %-15s |%n", "ContainerType", "Count");
+        System.out.println("-----------------------------------");
+
+        // Print the container types and counts
+        for (String containerType : containerCounts.keySet()) {
+            int count = containerCounts.get(containerType);
+            System.out.printf("| %-13s | %-15d |%n", containerType, count);
+        }
+
+        // Print the table footer
+        System.out.println("-----------------------------------");
+        return true;
+    }
 
     protected static int extractPortNumber(String portId) {
         // Define a regular expression pattern to match the number after "p_"

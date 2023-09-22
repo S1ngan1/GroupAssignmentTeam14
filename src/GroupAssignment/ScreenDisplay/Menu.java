@@ -177,8 +177,10 @@ public class Menu {
                                                 System.out.println("3. Move to another port");
                                                 System.out.println("4. Refuel");
                                                 System.out.println("5. Checking vehicle status");
-                                                System.out.println("6. Back to the previous page");
-                                                System.out.println("7. Exit");
+                                                System.out.println("6. Showing number of container");
+                                                System.out.println("7. Showing number of container (each type)");
+                                                System.out.println("8. Back to the previous page");
+                                                System.out.println("9. Exit");
                                                 vehicleNChoice = scanner.nextInt();
 
                                                 String prefix;
@@ -212,16 +214,22 @@ public class Menu {
                                                         System.out.println(currentVehicleList.get(key));
                                                         break;
                                                     case 6: //Back to the previous page
+                                                        currentVehicleList.get(key).displayGeneralNumberOfContainer();
                                                         break;
                                                     case 7:
+                                                        currentVehicleList.get(key).displayContainerReport(currentVehicleList.get(key).getCarrier());
+                                                        break;
+                                                    case 8:
+                                                        break;
+                                                    case 9:
                                                         System.out.println("Exiting the program.");
                                                         scanner.close();
                                                         System.exit(0);
                                                         break;
                                                     default:
-                                                        System.out.println("Invalid choice. Please enter a number from 1 to 7.");
+                                                        System.out.println("Invalid choice. Please enter a number from 1 to 9.");
                                                 }
-                                                if (vehicleNChoice == 6) {
+                                                if (vehicleNChoice == 8) {
                                                     break; // Exit the inner loop when the admin chooses to exit
                                                 }
                                             }

@@ -133,6 +133,7 @@ public class Ship extends Vehicle {
                     unloadedContainer = container;
                     totalWeight -= container.getWeight();
                     shipInitialFuelConsumption -= Container.getShip_Container().get(container.getContainerType());
+                    carrier.remove(container);
                     iterator.remove(); // Remove the container
                     successfullyUnloaded = true;
                     break;

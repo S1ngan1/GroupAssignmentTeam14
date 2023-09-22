@@ -1,4 +1,4 @@
-tripID, vehicle, date, dispatching_port, destination_port, Status
+tripID, vehicleName, date, dispatchingPort, destinationPort, Status
 T1, Toyota_Tacoma_TRD, , port1, port2, getting_goods
 T2, Peterbilt_389, , port1, port2, ongoing
 T3, Mack_Anthem, , port4, prot5, ongoing
