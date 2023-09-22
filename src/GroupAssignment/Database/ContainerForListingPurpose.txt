@@ -1,25 +1,26 @@
 ContainerID, ContainerType, Weight
-1, Dry Storage, 0.5
-2, Dry Storage, 0.7
-3, Dry Storage, 1
-4, Dry Storage, 4
-5, Dry Storage, 2
-6, Dry Storage, 10
-7, Liquid, 3
-8, Liquid, 2
-9, Liquid, 10.0
-10, Liquid, 4.2
-11, Liquid, 3.5
-12, Liquid, 5
-13, Open Top, 7
-14, Open Top, 6
-15, Open Top, 5
-16, Open Top, 6
-17, Open Top, 5
-18, Open Top, 6
-19, Open Side, 6
-20, Open Side, 8
-21, Open Side, 7
-22, Open Side, 6.3
-23, Open Side, 6
-24, Open Side, 12
+1, Dry Storage, 500
+2, Dry Storage, 700
+3, Dry Storage, 1000
+4, Dry Storage, 4000
+5, Dry Storage, 2000
+6, Dry Storage, 10000
+7, Liquid, 3000
+8, Liquid, 2000.0
+9, Liquid, 10000
+10, Liquid, 4200
+11, Liquid, 3500
+12, Liquid, 5000
+13, Open Top, 7000
+14, Open Top, 6000
+15, Open Top, 5000
+16, Open Top, 6000
+17, Open Top, 5000
+18, Open Top, 6000
+19, Open Side, 6000
+20, Open Side, 8000
+21, Open Side, 7000
+22, Open Side, 6300
+23, Open Side, 6000
+24, Open Side, 12000
+

@@ -1,4 +1,4 @@
-//(weight * weight/km * km ) * numberOfContainer
+//fuelLost(gallons) = (ContainerWeight * Fuelconsumption for each type of container placed on different types of vehicles (weight/km * km ) * numberOfContainer
 package GroupAssignment.Container;
 
 import java.util.HashMap;
@@ -7,8 +7,8 @@ public class Container {
     private String id;
     private String containerType;
     private double weight;
-    private static HashMap<String, Double> ship_Container;
-    private static HashMap<String, Double> truck_Container;
+    private static HashMap<String, Double> ship_Container = new HashMap<String, Double>();
+    private static HashMap<String, Double> truck_Container = new HashMap<String, Double>();
 
     public Container(String id, String containerType, double weight){
         this.id = id;
@@ -56,6 +56,32 @@ public class Container {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public static HashMap<String, Double> getShip_Container() {
+        ship_Container.put("Dry Storage", 3.5);
+        ship_Container.put("Open Top", 2.8);
+        ship_Container.put("Open Side", 2.7);
+        ship_Container.put("Refrigerated", 4.5);
+        ship_Container.put("Liquid", 4.8);
+        return ship_Container;
+    }
+
+    public static void setShip_Container(HashMap<String, Double> ship_Container) {
+        Container.ship_Container = ship_Container;
+    }
+
+    public static HashMap<String, Double> getTruck_Container() {
+        truck_Container.put("Dry Storage", 4.6);
+        truck_Container.put("Open Top", 3.2);
+        truck_Container.put("Open Side", 3.2);
+        truck_Container.put("Refrigerated", 5.4);
+        truck_Container.put("Liquid", 5.3);
+        return truck_Container;
+    }
+
+    public static void setTruck_Container(HashMap<String, Double> truck_Container) {
+        Container.truck_Container = truck_Container;
     }
 
     @Override

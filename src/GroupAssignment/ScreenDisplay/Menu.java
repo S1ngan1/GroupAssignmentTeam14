@@ -188,8 +188,9 @@ public class Menu {
                                                             System.out.println("2. Unload a container");
                                                             System.out.println("3. Move to another port");
                                                             System.out.println("4. Refuel");
-                                                            System.out.println("5. Back to the previous page");
-                                                            System.out.println("6. Exit");
+                                                            System.out.println("5. Checking vehicle status");
+                                                            System.out.println("6. Back to the previous page");
+                                                            System.out.println("7. Exit");
                                                             vehicleNChoice = scanner.nextInt();
 
                                                             String prefix;
@@ -209,29 +210,30 @@ public class Menu {
                                                                 case 1:
                                                                     // Retrieve the value associated with the key from the HashMap
                                                                     currentVehicleList.get(key).loadContainer();
-                                                                    System.out.println(currentVehicleList.get(key));
                                                                     break;
                                                                 case 2:
                                                                     currentVehicleList.get(key).unloadContainer();
-                                                                    System.out.println(currentVehicleList.get(key));
                                                                     break;
                                                                 case 3:
                                                                     currentVehicleList.get(key).moveVehicle(scanner);
-                                                                    System.out.println(currentVehicleList.get(key));
                                                                     break;
                                                                 case 4:
+                                                                    currentVehicleList.get(key).refuelingVehicle();
                                                                     break;
-                                                                case 5: //Back to the previous page
+                                                                case 5:
+                                                                    System.out.println(currentVehicleList.get(key));
                                                                     break;
-                                                                case 6:
+                                                                case 6: //Back to the previous page
+                                                                    break;
+                                                                case 7:
                                                                     System.out.println("Exiting the program.");
                                                                     scanner.close();
                                                                     System.exit(0);
                                                                     break;
                                                                 default:
-                                                                    System.out.println("Invalid choice. Please enter a number from 1 to 6.");
+                                                                    System.out.println("Invalid choice. Please enter a number from 1 to 7.");
                                                             }
-                                                            if (vehicleNChoice == 5){
+                                                            if (vehicleNChoice == 6){
                                                                 break; // Exit the inner loop when the admin chooses to exit
                                                             }
                                                         }

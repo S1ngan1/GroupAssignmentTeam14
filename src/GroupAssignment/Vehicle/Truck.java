@@ -17,15 +17,15 @@ public class Truck extends Vehicle {
     private static final String ContainerFilePath = FilePaths.ContainerFilePath;
     private String type;
 
-    private double totalWeight; //not an atrribute in the constructor
-    private ArrayList<Container> carrier; //not an atrribute in the constructor
-    private String currentPort; //not included in constructor
+    private double totalWeight = 0; //not an atrribute in the constructor
+    private ArrayList<Container> carrier = new ArrayList<Container>(); //not an atrribute in the constructor
 
+    private double totalFuelConsumption;
     private Container unloadedContainer = null;
+
+    private double truckInitialFuelConsumption = 0.2; //Truck will consume 25 gallons per km
     public Truck (String id, String name, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort ){
-        super(name, id, type, carryingCapacity, currentFuel, fuelCapacity, currentPort);
-        this.totalWeight = 0;
-        this.carrier = new ArrayList<Container>();
+        super(id, name, type, currentFuel, fuelCapacity, carryingCapacity, currentPort);
         setType(type);
     }
 
@@ -50,6 +50,25 @@ public class Truck extends Vehicle {
             this.type = type;
         }
         return matched;
+    }
+
+    @Override
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    @Override
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
+    }
+
+    @Override
+    public ArrayList<Container> getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(ArrayList<Container> carrier) {
+        this.carrier = carrier;
     }
 
     @Override
@@ -92,6 +111,7 @@ public class Truck extends Vehicle {
                         found = true;
                         System.out.println("Container added ");
                         totalWeight += weight;
+                        truckInitialFuelConsumption += Container.getShip_Container().get(container.getContainerType());
                     } else {
                         lines.add(line);
                     }
@@ -139,6 +159,7 @@ public class Truck extends Vehicle {
                 totalWeight -= container.getWeight();
                 iterator.remove(); // Remove the container
                 successfullyUnloaded = true;
+                truckInitialFuelConsumption -= Container.getShip_Container().get(container.getContainerType());
                 break;
             }
         }
@@ -186,25 +207,34 @@ public class Truck extends Vehicle {
 
     @Override
     public boolean moveVehicle(Scanner scanner) {
+        boolean ableToUnload = false;
         System.out.print("Move to port number: ");
         int destinationPort = scanner.nextInt();
         scanner.nextLine();
 
-        for (Container container : carrier) {
-            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() <= SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && (SystemAdmin.portList.get(destinationPort-1).getLandingAbility() && SystemAdmin.portList.get(extractPortNumber(super.getCurrentPort())-1).getLandingAbility())){
-                setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
-                SystemAdmin.portList.get(destinationPort - 1).getVehicleHangar().add(SystemAdmin.vehicleList.get(super.getId()));
-                SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getVehicleHangar().remove(SystemAdmin.vehicleList.get(super.getId()));
-                System.out.println("Vehicle moved to port "+destinationPort);
 
-                return true;
+        for (Container container : carrier) {
+            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() < SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && (SystemAdmin.portList.get(destinationPort-1).getLandingAbility() && SystemAdmin.portList.get(extractPortNumber(super.getCurrentPort())-1).getLandingAbility()) && getCurrentFuel() > 0) {
+                ableToUnload = true;
             }
         }
-        System.out.println("Cannot transport the vehicle to the designated port");
-        return false;
+        if(!ableToUnload){
+            System.out.println("Cannot transport the vehicle to the designated port");
+            return false;
+        }
+        else{
+            setCurrentFuel(super.getCurrentFuel() - (SystemAdmin.calculateDistanceWithParameter(SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getP_ID(), SystemAdmin.portList.get(destinationPort - 1).getP_ID()) * truckInitialFuelConsumption));
+            System.out.println("Vehicle moved to port "+destinationPort);
+            setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
+            return true;
+        }
+
     }
-
-
+    @Override
+    public boolean refuelingVehicle(){
+        setCurrentFuel(getFuelCapacity());
+        return true;
+    }
 
     @Override
     public String toString() {

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import java.io.*;
 
 
-public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin, ListingForSystemAdmin, CheckingForSystemAdmin, CalculateDistance {
+public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin, ListingForSystemAdmin, CheckingForSystemAdmin {
 
     public static final String ContainerFilePath = FilePaths.ContainerFilePath;
     public static final String ListingContainerFilePath = FilePaths.ListingContainerFilePath;
@@ -23,6 +23,8 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
 
     public static final String ShipFilePath = FilePaths.ShipFilePath;
     public static final String TruckFilePath = FilePaths.TruckFilePath;
+
+    public static double
     private Port port;
 
     private Container container;
@@ -277,7 +279,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             System.out.print("Truck Type (Basic, Reefer, Tanker): ");
             String truckType = scanner.nextLine();
 
-            Truck truck = new Truck(v_ID, v_name, truckType, v_cc, v_fuel, v_fc, v_port);
+            Truck truck = new Truck(v_ID, v_name, truckType, v_fuel, v_fc, v_cc, v_port);
 
             // Validate the truck type using the setTruckType method
             if (!truck.setType(truckType)) {
@@ -809,8 +811,23 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             return false;
         }
     }
+    public static double calculateDistanceWithParameter(String firstPort, String secondPort){
+        double longitude1 = 0.0;
+        double latitude1 = 0.0;
 
-    public boolean calculateDistance(){
+        double longitude2 = 0.0;
+        double latitude2 = 0.0;
+
+        longitude1 = getLongitude(firstPort, longitude1);
+        longitude2 = getLongitude(secondPort, longitude2);
+        latitude1 = getLatitude(firstPort, latitude1);
+        latitude2 = getLatitude(secondPort, latitude2);
+
+        double distance = Math.sqrt(Math.pow(longitude2 - longitude1, 2) + Math.pow(latitude2 - latitude1, 2));
+
+        return distance;
+    }
+    public static boolean calculateDistance(){
         Scanner scanner = new Scanner(System.in);
 
         // Variables to store longitude and latitude
@@ -820,9 +837,9 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         double longitude2 = 0.0;
         double latitude2 = 0.0;
 
-        System.out.print("First port: ");
+        System.out.print("First port (p_number): ");
         String firstPort= scanner.nextLine();
-        System.out.print("Second port: ");
+        System.out.print("Second port (p_number): ");
         String secondPort = scanner.nextLine();
 
 
@@ -837,7 +854,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
 
         return true;
     }
-    private double getLongitude(String firstPort, double longitude){
+    private static double getLongitude(String firstPort, double longitude){
         boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(portFilePath))) {
             String line;
@@ -872,7 +889,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         return longitude;
     }
 
-    private double getLatitude(String firstPort, double latitude){
+    private static double getLatitude(String firstPort, double latitude){
         boolean found = false;
         try (BufferedReader br = new BufferedReader(new FileReader(portFilePath))) {
             String line;

@@ -1,11 +1,26 @@
-truckID, truckName, type, currentFuel, fuelCapacity, carryingCapacity, currentPort
-tr_101, Ford_F-150, Basic, 66, 23, 690, p_1
-tr_102, Chevrolet_Colorado_ZR2, Tanker, 70, 21.1, 685, p_2
-tr_103, Toyota_Tacoma_TRD_Pro, Basic, 75, 21.1, 581, p_1
-tr_104, Chevy_Silverdo, Reefer, 45, 25, 2034.2, null
-tr_105, Nissan_Titan, Basic, 70, 31, 1028, p_2
-tr_106, Freightliner_Cascadia, Basic, 75, 135, 8436.82, p_2
-tr_107, Peterbilt_389, Basic, 81, 150, 5443.1, p_5
-tr_108, Kenworth_T680, Reefer, 66, 160, 8164.66, p_2
-tr_109, Volvo_VNL, Tanker, 91, 230, 10000, p_2
-tr_110, Mack_Anthem, Basic, 68, 250, 10400, p_2
+ContainerID, ContainerType, Weight
+1, Dry Storage, 500
+2, Dry Storage, 700
+3, Dry Storage, 1000
+4, Dry Storage, 4000
+5, Dry Storage, 2000
+6, Dry Storage, 10000
+7, Liquid, 3000
+8, Liquid, 2000.0
+9, Liquid, 10000
+10, Liquid, 4200
+11, Liquid, 3500
+12, Liquid, 5000
+13, Open Top, 7000
+14, Open Top, 6000
+15, Open Top, 5000
+16, Open Top, 6000
+17, Open Top, 5000
+18, Open Top, 6000
+19, Open Side, 6000
+20, Open Side, 8000
+21, Open Side, 7000
+22, Open Side, 6300
+23, Open Side, 6000
+24, Open Side, 12000
+
