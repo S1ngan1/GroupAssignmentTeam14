@@ -15,11 +15,13 @@ public class Ship extends Vehicle {
     private double totalFuelConsumption;
     private double totalWeight = 0;
 
+    private double currentPortStoringCapacity = SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getStoringCapacity();
+
     private ArrayList<Container> carrier = new ArrayList<Container>(); //not an atrribute in the constructor
 
     private Container unloadedContainer = null;
 
-    private double shipInitialFuelConsumption = 1; //Ship consumes 50 gallons per km
+    private double shipInitialFuelConsumption = 1; //Ship consumes 1 gallons per km
     public Ship(String id, String name, String type, double currentFuel, double fuelCapacity, double carryingCapacity, String currentPort) {
         super(id, name, type, currentFuel, fuelCapacity, carryingCapacity, currentPort);
     }
@@ -82,9 +84,14 @@ public class Ship extends Vehicle {
                     // Check if the current container matches the search ID & the vehicle is still able to carry the next container
                     if (id.equals(searchID) && totalWeight + weight <= getCarryingCapacity()) {
                         carrier.add(container); // Add the found container to the list
+                        if(SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getP_ID() != null){
+                            SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getContainerHangar().remove(container);
+                        }
+
                         found = true;
                         System.out.println("Container added ");
                         totalWeight += weight;
+                        currentPortStoringCapacity -= weight;
                         shipInitialFuelConsumption += Container.getShip_Container().get(container.getContainerType());
                     } else {
                         lines.add(line);
@@ -131,10 +138,13 @@ public class Ship extends Vehicle {
                 Container container = iterator.next();
                 if (container.getId().equals(searchID)) {
                     unloadedContainer = container;
-                    totalWeight -= container.getWeight();
-                    shipInitialFuelConsumption -= Container.getShip_Container().get(container.getContainerType());
-                    carrier.remove(container);
-                    iterator.remove(); // Remove the container
+                    if(SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getP_ID() != null){
+                        SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getContainerHangar().add(container);
+                    }
+                    totalWeight -= container.getWeight(); //THE TOTAL WEIGHT OF THE CARRIER DECREASES EVERYTIME THERE IS A NEW CONTAINER UNLOADED
+                    currentPortStoringCapacity += container.getWeight();
+                    shipInitialFuelConsumption -= Container.getShip_Container().get(container.getContainerType()); //THE TOTAL FUEL CONSUMPTION DECREASES
+                    iterator.remove();
                     successfullyUnloaded = true;
                     break;
                 }
@@ -171,14 +181,20 @@ public class Ship extends Vehicle {
         return successfullyUnloaded;
     }
     @Override
-    public boolean moveVehicle(Scanner scanner) {
+    public boolean moveVehicle(Scanner scanner, String vehicleID) {
         boolean ableToUnload = true;
         System.out.print("Move to port number: ");
         int destinationPort = scanner.nextInt();
         scanner.nextLine();
 
         for (Container container : carrier) {
-            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() > SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && getCurrentFuel() <= 0) {
+            //WE HAVE 3 CONDITIONS FOR A TRANSPORTATION OF SHIP TO EXIST:
+            //1: THE VEHICLE MUST BE ABLE TO UNLOAD AT LEAST 1 CONTAINER AT THE ARRIVAL PORT
+            //2: THE LANDING ABILITY BETWEEN TWO PORTS MUST BE DIFFERENT
+            //3: THE CURRENT FUEL OF THE SHIP MUST BE ABOVE 0
+
+
+            if (container.getWeight() + SystemAdmin.portList.get(destinationPort - 1).getCurrentStoring() > SystemAdmin.portList.get(destinationPort - 1).getStoringCapacity() && getCurrentFuel() <= 0 && (!SystemAdmin.portList.get(destinationPort-1).getLandingAbility() || SystemAdmin.portList.get(extractPortNumber(super.getCurrentPort())-1).getLandingAbility())) {
                 ableToUnload = false;
             }
         }
@@ -190,6 +206,8 @@ public class Ship extends Vehicle {
         else{
             setCurrentFuel(super.getCurrentFuel() - (SystemAdmin.calculateDistanceWithParameter(SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getP_ID(), SystemAdmin.portList.get(destinationPort - 1).getP_ID()) * shipInitialFuelConsumption));
             System.out.println("Vehicle moved to port "+destinationPort);
+            SystemAdmin.portList.get(destinationPort - 1).getVehicleHangar().add(SystemAdmin.vehicleList.get(vehicleID));
+            SystemAdmin.portList.get(extractPortNumber(getCurrentPort())-1).getVehicleHangar().remove(SystemAdmin.vehicleList.get(vehicleID));
             setCurrentPort(SystemAdmin.portList.get(destinationPort - 1).getP_ID());
             return true;
         }

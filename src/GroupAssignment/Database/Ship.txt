@@ -1,7 +1,7 @@
 ship_ID, shipName, type, currentFuel, fuelCapacity, carryingCapacity, currentPort
 sh_301, Container_Transportation, Ship, 7200, 10000, 24000, p_1
 sh_302, Container_Tanker, Ship, 9375, 12500, 27000, p_1
-sh_303, Liquid_Container, Ship, 13950, 15000, 30000, null
+sh_303, Liquid_Container, Ship, 13950, 15000, 30000,
 sh_304, Multipurpose Ship, Ship, 19600, 20000, 41250, p_2
 sh_305, Special_Transportation, Ship, 21500, 21500, 42000, p_5
 sh_306, Container_Transportation, Ship, 20424, 22200, 37500, p_3

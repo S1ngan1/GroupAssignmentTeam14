@@ -1,0 +1,33 @@
+tripID, vehicleName, date, dispatching_port, destination_port, Status
+T1, Toyota_Tacoma_TRD, , p_1, port2, Getting Goods
+T2, Peterbilt_389, , p_1, p_2, Ongoing
+T3, Mack_Anthem, , port4, prot5, Ongoing
+T4, Mack_Anthem, , port5, port4, Completed
+T5, Kenworth_T680, , port2, p_1, Ongoing
+T6, Chevy_Silverdo, , port2, p_1, Ongoing
+T7, Kenworth_T680, p_1, port2, Getting Goods
+T8, Nissan_Titan, , port4, port5, Completed
+T9, Chevy_Silverdo, , p_1, port2, Getting Goods
+T10, Chevy_Silverdo, , port2, p_1, Ongoing
+T11, Volvo_VNL, , port4, port5, Ongoing
+T12, Ford_F-150, , p_1, port2, Ongoing
+T13, Ford_F-150, , port2, p_1, Ongoing
+T14, Freightliner_Cascadia, , port4, port5, Ongoing
+T15, Freightliner_Cascadia, port4, port5, Completed
+T16, VN_Container_Ship, , p_1, p_3, Ongoing
+T17, VN_Container_Ship, , port3, p_4, Getting Goods
+T18, Singapore_Transportation, , port3, port2, Completed
+T19, Thailand_Container_Ship, , port4, p_1, Ongoing
+T20, Fast_Ship, , port4, port3, Ongoing
+T21, Special_Transportation, , port4, p_1, Ongoing
+T22, Multipurpose_Ship, , port3, port2, Ongoing
+T23, Liquid_Container, , port2, port3, Getting Goods
+T24, Container_Transportation, , p_1, port4, Ongoing
+T25, Thailand_Container_Ship, , p_5, p_1, Ongoing
+T26, Volvo_VNL, 2022-10-31, p_2, p_5, Ongoing
+T27, Mack_Anthem, 2023-01-02, p_2, p_5, Getting Goods
+T28, Mack_Anthem, 2023-11-09, p_2, p_4, Ongoing
+T29, Fast_Ship, 2023-12-10, p_5, p_3, Completed
+T1, Container_Transportation, 2022-10-10, p_1, p_3, Getting Goods
+T1, Thailand_Container_Ship, 2023-10-09, p_1, p_3, Completed
+T2, Container_Transportation, 2023-10-11, p_3, p_4, Ongoing

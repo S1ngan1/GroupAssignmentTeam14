@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import GroupAssignment.FilePaths.FilePaths;
 import GroupAssignment.Port.Port;
+import GroupAssignment.Trip.Trip;
 import GroupAssignment.Vehicle.*;
 
 import java.io.IOException;
@@ -29,297 +30,309 @@ public class Menu {
     public static void startMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        //First thing a user see. 2 options to log in and an exit button
+        boolean isAuthenticated = false;
         System.out.println("--------------------LOGIN PAGE---------------------");
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
 
-        Account authenticatedAccount = authenticateUser(username, password);
+       while(!isAuthenticated){
+           //First thing a user see. 2 options to log in and an exit button
 
-        if (authenticatedAccount != null) {
-            int role = authenticatedAccount.getRole();
-            if (role == 0) {
-                System.out.println("Login successfully.");
-                //Create a new SystemAdmin instance on the server
-                SystemAdmin admin = new SystemAdmin();
-                HashMap<String, Vehicle> currentVehicleList = SystemAdmin.vehicleList;
+           System.out.print("Enter username: ");
+           String username = scanner.nextLine();
+           System.out.print("Enter password: ");
+           String password = scanner.nextLine();
 
-                int adminChoice; // Declare adminChoice outside the loop
-                //System Admin Dashboard
-                while (true) {
-                    System.out.println("=======Welcome to CONTAINER PORT MANAGEMENT SYSTEM========");
-                    System.out.println("Select an option:");
-                    System.out.println("1. Add a new port");
-                    System.out.println("2. Add a new vehicle");
-                    System.out.println("3. Add a new container");
-                    System.out.println("4. List all the port");
-                    System.out.println("5. List all the container");
-                    System.out.println("6. List all the vehicle");
-                    System.out.println("7. Remove a port: ");
-                    System.out.println("8. Remove a vehicle: ");
-                    System.out.println("9. Remove a container: ");
-                    System.out.println("10. List all the trip from day A to day B or in any given day");
-                    System.out.println("11. Calculate distance between 2 ports");
-                    System.out.println("12. Managing activities inside the system");
-                    System.out.println("13. Back to the main system");
-                    System.out.println("14. Exit");
-                    adminChoice = scanner.nextInt(); // Read the choice here
+           Account authenticatedAccount = authenticateUser(username, password);
 
-                    switch (adminChoice) {
-                        case 1:
-                            admin.addPort();
-                            break;
-                        case 2:
-                            admin.addVehicle();
-                            break;
-                        case 3:
-                            admin.addContainer();
-                            break;
-                        case 4:
-                            admin.listPort();
-                            break;
-                        case 5:
-                            admin.listContainer();
-                            break;
-                        case 6:
-                            admin.listVehicle();
-                            break;
-                        case 7:
-                            admin.removePort();
-                            break;
-                        case 8:
-                            admin.removeVehicle();
-                            break;
-                        case 9:
-                            admin.removeContainer();
-                            break;
-                        case 10:
-                            break;
-                        case 11:
-                            admin.calculateDistance();
-                            break;
-                        case 12:
-                            int navigateChoice;
-                            while (true) {
-                                System.out.println("=======SYSTEM NAVIGATING========");
-                                System.out.println("Select an option:");
-                                System.out.println("1. Port checking: ");
-                                System.out.println("2. Vehicle checking: ");
-                                System.out.println("3. Container checking ");
-                                System.out.println("4. Back to the previous page");
-                                System.out.println("5. Exit");
-                                navigateChoice = scanner.nextInt();
+           if (authenticatedAccount != null) {
+               int role = authenticatedAccount.getRole();
+               if (role == 0) {
+                   System.out.println("Login successfully.");
+                   //Create a new SystemAdmin instance on the server
+                   SystemAdmin admin = new SystemAdmin();
+                   Trip trip = new Trip();
+                   HashMap<String, Vehicle> currentVehicleList = SystemAdmin.vehicleList;
 
-                                switch (navigateChoice) {
-                                    case 1:
-                                        int portChoice;
-                                        System.out.print("Select the port you want to check: ");
-                                        portChoice = scanner.nextInt();
-                                        scanner.nextLine();
+                   int adminChoice; // Declare adminChoice outside the loop
+                   //System Admin Dashboard
+                   while (true) {
+                       System.out.println("=======Welcome to CONTAINER PORT MANAGEMENT SYSTEM========");
+                       System.out.println("Select an option:");
+                       System.out.println("1. Add a new port");
+                       System.out.println("2. Add a new vehicle");
+                       System.out.println("3. Add a new container");
+                       System.out.println("4. List all the port");
+                       System.out.println("5. List all the container");
+                       System.out.println("6. List all the vehicle");
+                       System.out.println("7. Remove a port: ");
+                       System.out.println("8. Remove a vehicle: ");
+                       System.out.println("9. Remove a container: ");
+                       System.out.println("10. Add a new trip for ship");
+                       System.out.println("11. Add a new trip for truck");
+                       System.out.println("12. Calculate distance between 2 ports");
+                       System.out.println("13. Managing activities inside the system");
+                       System.out.println("14. Back to the main system");
+                       System.out.println("15. Exit");
+                       adminChoice = scanner.nextInt(); // Read the choice here
 
-                                        if (admin.checkPort(portChoice)) {
-                                            int portNChoice;
-                                            while (true) {
-                                                System.out.println("=======WELCOME TO PORT " + portChoice + "========");
-                                                System.out.println("Select an option:");
-                                                System.out.println("1. List all the container: ");
-                                                System.out.println("2. List all the vehicle: ");
-                                                System.out.println("3. Change the attribute: ");
-                                                System.out.println("4. Back to the previous page ");
-                                                System.out.println("5. Exit ");
-                                                portNChoice = scanner.nextInt();
+                       switch (adminChoice) {
+                           case 1:
+                               admin.addPort();
+                               break;
+                           case 2:
+                               admin.addVehicle();
+                               break;
+                           case 3:
+                               admin.addContainer();
+                               break;
+                           case 4:
+                               admin.listPort();
+                               break;
+                           case 5:
+                               admin.listContainer();
+                               break;
+                           case 6:
+                               admin.listVehicle();
+                               break;
+                           case 7:
+                               admin.removePort();
+                               break;
+                           case 8:
+                               admin.removeVehicle();
+                               break;
+                           case 9:
+                               admin.removeContainer();
+                               break;
+                           case 10:
+                               SystemAdmin.createShipsTrip();
+                               break;
+                           case 11:
+                               SystemAdmin.createTrucksTrip();
+                               break;
+                           case 12:
+                               admin.calculateDistance();
+                               break;
+                           case 13:
+                               int navigateChoice;
+                               while (true) {
+                                   System.out.println("=======SYSTEM NAVIGATING========");
+                                   System.out.println("Select an option:");
+                                   System.out.println("1. Port checking: ");
+                                   System.out.println("2. Vehicle checking: ");
+                                   System.out.println("3. Container checking ");
+                                   System.out.println("4. Back to the previous page");
+                                   System.out.println("5. Exit");
+                                   navigateChoice = scanner.nextInt();
 
-                                                switch (portNChoice) {
-                                                    case 1:
-                                                        break;
-                                                    case 2:
-                                                        currentPortList.get(portChoice - 1).listVehicleInPort();
-                                                        break;
-                                                    case 3:
-                                                        break;
-                                                    case 4: //Back to the previous page
-                                                        break;
-                                                    case 5:
-                                                        System.out.println("Exiting the program.");
-                                                        scanner.close();
-                                                        System.exit(0);
-                                                        break;
-                                                    default:
-                                                        System.out.println("Invalid choice. Please enter a number from 1 to 5.");
-                                                }
-                                                if (portNChoice == 4) {
-                                                    break; // Exit the inner loop when the admin chooses to exit
-                                                }
-                                            }
-                                        } else {
-                                            System.out.println("Port is not available");
-                                        }
-                                        break;
+                                   switch (navigateChoice) {
+                                       case 1:
+                                           int portChoice;
+                                           System.out.print("Select the port you want to check: ");
+                                           portChoice = scanner.nextInt();
+                                           scanner.nextLine();
 
-                                    case 2:
-                                        int vehicleChoice;
-                                        String vehicleType;
-                                        System.out.print("Select the vehicle you want to check: ");
-                                        vehicleChoice = scanner.nextInt();
-                                        scanner.nextLine();
-                                        System.out.print("Vehicle type: ");
-                                        vehicleType = scanner.nextLine();
+                                           if (admin.checkPort(portChoice)) {
+                                               int portNChoice;
+                                               while (true) {
+                                                   System.out.println("=======WELCOME TO PORT " + portChoice + "========");
+                                                   System.out.println("Select an option:");
+                                                   System.out.println("1. List all the container: ");
+                                                   System.out.println("2. List all the vehicle: ");
+                                                   System.out.println("3. Change the attribute: ");
+                                                   System.out.println("4. Back to the previous page ");
+                                                   System.out.println("5. Exit ");
+                                                   portNChoice = scanner.nextInt();
 
-                                        if (admin.checkVehicle(vehicleChoice, vehicleType)) {
-                                            int vehicleNChoice;
-                                            while (true) {
-                                                System.out.println("=======WELCOME TO " + vehicleType.toUpperCase() + " " + vehicleChoice + " DASHB0ARD========");
-                                                System.out.println("Select an option:");
-                                                System.out.println("1. Load a container");
-                                                System.out.println("2. Unload a container");
-                                                System.out.println("3. Move to another port");
-                                                System.out.println("4. Refuel");
-                                                System.out.println("5. Checking vehicle status");
-                                                System.out.println("6. Showing number of container");
-                                                System.out.println("7. Showing number of container (each type)");
-                                                System.out.println("8. Back to the previous page");
-                                                System.out.println("9. Exit");
-                                                vehicleNChoice = scanner.nextInt();
+                                                   switch (portNChoice) {
+                                                       case 1:
+                                                           currentPortList.get(portChoice - 1).listContainerInPort();
+                                                           break;
+                                                       case 2:
+                                                           currentPortList.get(portChoice - 1).listVehicleInPort();
+                                                           break;
+                                                       case 3:
+                                                           break;
+                                                       case 4: //Back to the previous page
+                                                           break;
+                                                       case 5:
+                                                           System.out.println("Exiting the program.");
+                                                           scanner.close();
+                                                           System.exit(0);
+                                                           break;
+                                                       default:
+                                                           System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+                                                   }
+                                                   if (portNChoice == 4) {
+                                                       break; // Exit the inner loop when the admin chooses to exit
+                                                   }
+                                               }
+                                           } else {
+                                               System.out.println("Port is not available");
+                                           }
+                                           break;
 
-                                                String prefix;
-                                                if (vehicleChoice >= 300) {
-                                                    prefix = "sh_";
-                                                } else if (vehicleChoice >= 100) {
-                                                    prefix = "tr_";
-                                                } else {
-                                                    System.out.println("Invalid input.");
-                                                    return;
-                                                }
+                                       case 2:
+                                           int vehicleChoice;
+                                           String vehicleType;
+                                           System.out.print("Select the vehicle you want to check: ");
+                                           vehicleChoice = scanner.nextInt();
+                                           scanner.nextLine();
+                                           System.out.print("Vehicle type: ");
+                                           vehicleType = scanner.nextLine();
 
-                                                // Create the key by concatenating the prefix and user input
-                                                String key = prefix + vehicleChoice;
+                                           if (admin.checkVehicle(vehicleChoice, vehicleType)) {
+                                               int vehicleNChoice;
+                                               while (true) {
+                                                   System.out.println("=======WELCOME TO " + vehicleType.toUpperCase() + " " + vehicleChoice + " DASHB0ARD========");
+                                                   System.out.println("Select an option:");
+                                                   System.out.println("1. Load a container");
+                                                   System.out.println("2. Unload a container");
+                                                   System.out.println("3. Move to another port");
+                                                   System.out.println("4. Refuel");
+                                                   System.out.println("5. Checking vehicle status");
+                                                   System.out.println("6. Showing number of container");
+                                                   System.out.println("7. Showing number of container (each type)");
+                                                   System.out.println("8. Back to the previous page");
+                                                   System.out.println("9. Exit");
+                                                   vehicleNChoice = scanner.nextInt();
 
-                                                switch (vehicleNChoice) {
-                                                    case 1:
-                                                        // Retrieve the value associated with the key from the HashMap
-                                                        currentVehicleList.get(key).loadContainer();
-                                                        break;
-                                                    case 2:
-                                                        currentVehicleList.get(key).unloadContainer();
-                                                        break;
-                                                    case 3:
-                                                        currentVehicleList.get(key).moveVehicle(scanner);
-                                                        break;
-                                                    case 4:
-                                                        currentVehicleList.get(key).refuelingVehicle();
-                                                        break;
-                                                    case 5:
-                                                        System.out.println(currentVehicleList.get(key));
-                                                        break;
-                                                    case 6: //Back to the previous page
-                                                        currentVehicleList.get(key).displayGeneralNumberOfContainer();
-                                                        break;
-                                                    case 7:
-                                                        currentVehicleList.get(key).displayContainerReport(currentVehicleList.get(key).getCarrier());
-                                                        break;
-                                                    case 8:
-                                                        break;
-                                                    case 9:
-                                                        System.out.println("Exiting the program.");
-                                                        scanner.close();
-                                                        System.exit(0);
-                                                        break;
-                                                    default:
-                                                        System.out.println("Invalid choice. Please enter a number from 1 to 9.");
-                                                }
-                                                if (vehicleNChoice == 8) {
-                                                    break; // Exit the inner loop when the admin chooses to exit
-                                                }
-                                            }
-                                        } else {
-                                            System.out.println("Vehicle is not available");
-                                        }
-                                        break;
-                                    case 3:
-                                        break;
-                                    case 4:  //back to the previous page
-                                        break;
-                                    case 5:
-                                        System.out.println("Exiting the program.");
-                                        scanner.close();
-                                        System.exit(0);
-                                        break;
-                                    default:
-                                        System.out.println("Invalid choice. Please enter a number from 1 to 5.");
-                                }
-                                if (navigateChoice == 4) {
-                                    break; // Exit the inner loop when the admin chooses to exit
-                                }
-                            }
-                            break;
-                        case 13: //Back to the previous page
-                            break;
-                        case 14:
-                            System.out.println("Exiting the program.");
-                            scanner.close();
-                            System.exit(0);
-                            break;
-                        default:
-                            System.out.println("Invalid choice. Please enter a number from 1 to 14.");
-                    }
+                                                   String prefix;
+                                                   if (vehicleChoice >= 300) {
+                                                       prefix = "sh_";
+                                                   } else if (vehicleChoice >= 100) {
+                                                       prefix = "tr_";
+                                                   } else {
+                                                       System.out.println("Invalid input.");
+                                                       return;
+                                                   }
 
-                    if (adminChoice == 13) {
-                        break; // Exit the inner loop when the admin chooses to exit
-                    }
-                }
-            } else if (role == 1) {
+                                                   // Create the key by concatenating the prefix and user input
+                                                   String key = prefix + vehicleChoice;
 
-                PortManager portManager = new PortManager();
-                int portChoice;
-                System.out.print("Select the port you want to check: ");
-                portChoice = scanner.nextInt();
-                scanner.nextLine();
+                                                   switch (vehicleNChoice) {
+                                                       case 1:
+                                                           // Retrieve the value associated with the key from the HashMap
+                                                           currentVehicleList.get(key).loadContainer();
+                                                           break;
+                                                       case 2:
+                                                           currentVehicleList.get(key).unloadContainer();
+                                                           break;
+                                                       case 3:
+                                                           currentVehicleList.get(key).moveVehicle(scanner, currentVehicleList.get(key).getId());
+                                                           break;
+                                                       case 4:
+                                                           currentVehicleList.get(key).refuelingVehicle();
+                                                           break;
+                                                       case 5:
+                                                           System.out.println(currentVehicleList.get(key));
+                                                           break;
+                                                       case 6: //Back to the previous page
+                                                           currentVehicleList.get(key).displayGeneralNumberOfContainer();
+                                                           break;
+                                                       case 7:
+                                                           currentVehicleList.get(key).displayContainerReport(currentVehicleList.get(key).getCarrier());
+                                                           break;
+                                                       case 8:
+                                                           break;
+                                                       case 9:
+                                                           System.out.println("Exiting the program.");
+                                                           scanner.close();
+                                                           System.exit(0);
+                                                           break;
+                                                       default:
+                                                           System.out.println("Invalid choice. Please enter a number from 1 to 9.");
+                                                   }
+                                                   if (vehicleNChoice == 8) {
+                                                       break; // Exit the inner loop when the admin chooses to exit
+                                                   }
+                                               }
+                                           } else {
+                                               System.out.println("Vehicle is not available");
+                                           }
+                                           break;
+                                       case 3:
+                                           break;
+                                       case 4:  //back to the previous page
+                                           break;
+                                       case 5:
+                                           System.out.println("Exiting the program.");
+                                           scanner.close();
+                                           System.exit(0);
+                                           break;
+                                       default:
+                                           System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+                                   }
+                                   if (navigateChoice == 4) {
+                                       break; // Exit the inner loop when the admin chooses to exit
+                                   }
+                               }
+                               break;
+                           case 14: //Back to the previous page
+                               break;
+                           case 15:
+                               System.out.println("Exiting the program.");
+                               scanner.close();
+                               System.exit(0);
+                               break;
+                           default:
+                               System.out.println("Invalid choice. Please enter a number from 1 to 15.");
+                       }
+
+                       if (adminChoice == 14) {
+                           break; // Exit the inner loop when the admin chooses to exit
+                       }
+                   }
+               } else if (role == 1) {
+
+                   PortManager portManager = new PortManager();
+                   int portChoice;
+                   System.out.print("Select the port you want to check: ");
+                   portChoice = scanner.nextInt();
+                   scanner.nextLine();
 
 
-                if (portManager.checkPort(portChoice)) {
-                    int portNChoice;
-                    while (true) {
-                        System.out.println("=======WELCOME TO PORT " + portChoice + "========");
-                        System.out.println("Select an option:");
-                        System.out.println("1. List all the container: ");
-                        System.out.println("2. List all the vehicle: ");
-                        System.out.println("3. Change the attribute: ");
-                        System.out.println("4. Back to the previous page ");
-                        System.out.println("5. Exit ");
-                        portNChoice = scanner.nextInt();
+                   if (portManager.checkPort(portChoice)) {
+                       int portNChoice;
+                       while (true) {
+                           System.out.println("=======WELCOME TO PORT " + portChoice + "========");
+                           System.out.println("Select an option:");
+                           System.out.println("1. List all the container: ");
+                           System.out.println("2. List all the vehicle: ");
+                           System.out.println("3. Change the attribute: ");
+                           System.out.println("4. Back to the previous page ");
+                           System.out.println("5. Exit ");
+                           portNChoice = scanner.nextInt();
 
-                        switch (portNChoice) {
-                            case 1:
-                                break;
-                            case 2:
-                                currentPortList.get(portChoice - 1).listVehicleInPort();
-                                break;
-                            case 3:
-                                break;
-                            case 4: //Back to the previous page
-                                break;
-                            case 5:
-                                System.out.println("Exiting the program.");
-                                scanner.close();
-                                System.exit(0);
-                                break;
-                            default:
-                                System.out.println("Invalid choice. Please enter a number from 1 to 5.");
-                        }
-                        if (portNChoice == 4) {
-                            break; // Exit the inner loop when the admin chooses to exit
-                        }
-                    }
-                }
-            }
-            else {
-                System.out.println("Invalid role.");
-            }
-        } else {
-            System.out.println("Authentication failed. Invalid username or password.");
-        }
+                           switch (portNChoice) {
+                               case 1:
+                                   break;
+                               case 2:
+                                   currentPortList.get(portChoice - 1).listVehicleInPort();
+                                   break;
+                               case 3:
+                                   break;
+                               case 4: //Back to the previous page
+                                   break;
+                               case 5:
+                                   System.out.println("Exiting the program.");
+                                   scanner.close();
+                                   System.exit(0);
+                                   break;
+                               default:
+                                   System.out.println("Invalid choice. Please enter a number from 1 to 5.");
+                           }
+                           if (portNChoice == 4) {
+                               break; // Exit the inner loop when the admin chooses to exit
+                           }
+                       }
+                   }
+               }
+               else {
+                   System.out.println("Invalid role.");
+               }
+           } else {
+               System.out.println("Authentication failed. Invalid username or password.");
+           }
+       }
     }
 
     //ADDITIONAL MENU METHODS

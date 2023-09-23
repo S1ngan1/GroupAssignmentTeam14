@@ -134,7 +134,7 @@ public class Vehicle {
     // Move the vehicle only if it is verified for transportation
     // I just made it moved to another port freely with no constraint. Update expected
 
-    public boolean moveVehicle(Scanner scanner) {
+    public boolean moveVehicle(Scanner scanner, String vehicleID) {
         return true;
     }
     public boolean refuelingVehicle(){
@@ -172,6 +172,11 @@ public class Vehicle {
     }
 
     protected static int extractPortNumber(String portId) {
+        if (portId == null) {
+            // Handle the case where portId is null (return a default value or handle as needed)
+            return -1; // For example, return -1 to indicate an invalid port number
+        }
+
         // Define a regular expression pattern to match the number after "p_"
         Pattern pattern = Pattern.compile("p_(\\d+)");
 

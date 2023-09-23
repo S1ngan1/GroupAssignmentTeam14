@@ -3,9 +3,11 @@ package GroupAssignment.ScreenDisplay;
 import GroupAssignment.Interface.*;
 import GroupAssignment.Port.Port;
 import GroupAssignment.Container.Container;
+import GroupAssignment.Trip.Trip;
 import GroupAssignment.Vehicle.*;
 import GroupAssignment.FilePaths.FilePaths;
 
+import java.sql.Array;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -13,9 +15,13 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import java.io.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 
 public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin, ListingForSystemAdmin, CheckingForSystemAdmin {
+    private static int tripCounter = 1;
 
     public static final String ContainerFilePath = FilePaths.ContainerFilePath;
     public static final String ListingContainerFilePath = FilePaths.ListingContainerFilePath;
@@ -24,7 +30,15 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
     public static final String ShipFilePath = FilePaths.ShipFilePath;
     public static final String TruckFilePath = FilePaths.TruckFilePath;
 
-    public static double totalFuelUsedInADay;
+    public static final String TripFilePath = FilePaths.TripFilePath;
+    public static final String Port1Trip = FilePaths.Port1Trip;
+    public static final String Port2Trip = FilePaths.Port2Trip;
+    public static final String Port3Trip = FilePaths.Port3Trip;
+    public static final String Port4Trip = FilePaths.Port4Trip;
+    public static final String Port5Trip = FilePaths.Port5Trip;
+
+
+    private static double totalFuelUsedInADay;
     private Port port;
 
     private Container container;
@@ -38,6 +52,9 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
     public ArrayList<Port> getPortList() {
         return portList;
     }
+
+    public static ArrayList<String> shipNames = Trip.getShipNames();
+    public static ArrayList<String> truckNames = Trip.getTruckNames();
 
     public void setPortList(ArrayList<Port> portList) {
         this.portList = portList;
@@ -90,6 +107,64 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         }
     }
 
+/*
+    private static ArrayList<String> readShipNamesFromFile(String filePath) {
+        ArrayList<String> shipNames = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean firstLine = true; // Flag to skip the first line
+            while ((line = br.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Skip the header
+                }
+
+                // Split the line by comma (assuming it's CSV-like)
+                String[] parts = line.split(", ");
+
+                // Check if there are enough parts and the ship name is not null
+                if (parts.length >= 2 && parts[1] != null && !parts[1].isEmpty()) {
+                    // Add the ship name to the ArrayList
+                    shipNames.add(parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return shipNames;
+    }
+
+    public static ArrayList<String> readTruckNamesFromFile(String filePath) {
+        ArrayList<String> truckNames = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean firstLine = true; // Flag to skip the first line
+            while ((line = br.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Skip the header
+                }
+
+                // Split the line by comma (assuming it's CSV-like)
+                String[] parts = line.split(", ");
+
+                // Check if there are enough parts and the truck name is not null
+                if (parts.length >= 2 && parts[1] != null && !parts[1].isEmpty()) {
+                    // Add the truck name to the ArrayList
+                    truckNames.add(parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return truckNames;
+    }
+*/
+
     private static HashMap<String, Vehicle> loadVehicles() {
         HashMap<String, Vehicle> vehicles = new HashMap<>();
 
@@ -123,6 +198,14 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
                     double carryingCapacity = Double.parseDouble(parts[5].trim());
                     String currentPort = parts[6].trim();
 
+                    // Check if currentPort is null or empty and handle accordingly
+                    if (currentPort == null || currentPort.isEmpty()) {
+                        // Handle the case where currentPort is missing or empty
+                        // You can set a default value or handle it as needed for your application
+                        // For example, you can set it to "UNKNOWN_PORT"
+                        currentPort = "UNKNOWN_PORT";
+                    }
+
                     if (vehicleType.equalsIgnoreCase("ship")) {
                         Ship ship = new Ship(vehicleID, vehicleName, vehicleType, currentFuel, fuelCapacity, carryingCapacity, currentPort);
                         vehicles.put(vehicleID, ship);
@@ -136,7 +219,6 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             e.printStackTrace();
         }
     }
-
     // Save vehicles to the data files
     private static void saveVehicles(HashMap<String, Vehicle> vehicles) {
         // Separate vehicles into ship and truck data
@@ -363,6 +445,370 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         }
         return true;
     }
+
+    public static void createShipsTrip() {
+        Scanner scanner = new Scanner(System.in);
+        String shipId = null;
+
+        boolean isShipIdValid = false;
+        while (!isShipIdValid) {
+            System.out.print("Enter Ship ID (sh_number): ");
+            shipId = scanner.nextLine();
+
+            isShipIdValid = isShipIdValid(shipId);
+
+            if (!isShipIdValid) {
+                System.out.println("Invalid ship ID. Please enter a valid ship ID.");
+            }
+        }
+
+        String shipName = null;
+        boolean isValidShipName = false;
+
+        while (!isValidShipName) {
+            System.out.print("Enter Ship Name: ");
+            shipName = scanner.nextLine();
+
+            boolean isShipNameMatched = isShipNameMatched(shipId, shipName);
+
+            // Check if the entered truck name exists in TruckNames
+            if (isShipNameMatched && shipNames.contains(" " + shipName)) {
+                isValidShipName = true;
+            } else {
+                System.out.println("Ship is not suitable. Please enter a valid ship name.");
+            }
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date departureDate = null;
+        Date arrivalDate = null;
+
+        try {
+            System.out.print("Enter Departure Date (yyyy-MM-dd): ");
+            departureDate = dateFormat.parse(scanner.nextLine());
+
+            System.out.print("Enter Arrival Date (yyyy-MM-dd): ");
+            arrivalDate = dateFormat.parse(scanner.nextLine());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String departurePort = null;
+        String arrivalPort = null;
+        boolean arePortsValid = false;
+
+        while (!arePortsValid) {
+            System.out.print("Enter Departure Port (e.g., p_1): ");
+            departurePort = scanner.nextLine();
+
+            System.out.print("Enter Arrival Port (e.g., p_4): ");
+            arrivalPort = scanner.nextLine();
+
+            if (departurePort.equals(arrivalPort)) {
+                System.out.println("Departure and Arrival Ports must be different.");
+            } else {
+                // Determine the landing ability based on departure and arrival ports
+                boolean canLand = determineLandingAbilityForShip(departurePort, arrivalPort);
+
+                if (canLand) {
+                    arePortsValid = true; // Ports are valid, exit the loop
+                } else {
+                    System.out.println("Unable to create the trip. Landing ability mismatch. Please re-enter ports.");
+                }
+            }
+        }
+
+        String shipStatus = null;
+        boolean isValidShipStatus = false;
+
+        while (!isValidShipStatus) {
+            System.out.print("Enter Ship Status (Ongoing/Completed/Getting Goods): ");
+            shipStatus = scanner.nextLine();
+
+            // Check if the entered status is valid (you can add more checks as needed)
+            if (shipStatus.equalsIgnoreCase("Ongoing") ||
+                    shipStatus.equalsIgnoreCase("Completed") ||
+                    shipStatus.equalsIgnoreCase("Getting Goods")) {
+                isValidShipStatus = true;
+            } else {
+                System.out.println("Invalid Ship Status. Please enter a valid status.");
+            }
+        }
+        String tripId = "T" + tripCounter++;
+        // Create a trip entry string
+        String tripEntry = String.format("%s, %s, %s, %s, %s, %s", tripId, shipName, dateFormat.format(departureDate),
+                departurePort, arrivalPort, shipStatus);
+
+        // Write the trip entry to the departure port-specific file
+        appendTripEntryToFile(tripEntry, getPortTripFilePath(departurePort));
+
+        // Write the trip entry to the arrival port-specific file
+        appendTripEntryToFile(tripEntry, getPortTripFilePath(arrivalPort));
+
+        // Write the trip entry to the main trip file
+        appendTripEntryToFile(tripEntry, TripFilePath);
+
+        System.out.println("Ship trip created successfully!");
+    }
+
+    public static void createTrucksTrip() {
+        Scanner scanner = new Scanner(System.in);
+        String truckId = null;
+
+        boolean isTruckIdValid = false;
+        while (!isTruckIdValid) {
+            System.out.print("Enter Truck ID (tr_number): ");
+            truckId = scanner.nextLine();
+
+            isTruckIdValid = isTruckIdValid(truckId);
+
+            if (!isTruckIdValid) {
+                System.out.println("Invalid Truck ID. Please enter a valid truck ID.");
+            }
+        }
+
+        String truckName = null;
+        boolean isValidTruckName = false;
+
+        while (!isValidTruckName) {
+            System.out.print("Enter Truck Name: ");
+            truckName = scanner.nextLine();
+
+            boolean isTruckNameMatched = isTruckNameMatched(truckId, truckName);
+
+            // Check if the entered truck name exists in TruckNames
+            if (isTruckNameMatched && truckNames.contains(" " + truckName)) {
+                isValidTruckName = true;
+            } else {
+                System.out.println("Truck is not suitable. Please enter a valid truck name.");
+            }
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date departureDate = null;
+        Date arrivalDate = null;
+
+        try {
+            System.out.print("Enter Departure Date (yyyy-MM-dd): ");
+            departureDate = dateFormat.parse(scanner.nextLine());
+
+            System.out.print("Enter Arrival Date (yyyy-MM-dd): ");
+            arrivalDate = dateFormat.parse(scanner.nextLine());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String departurePort = null;
+        String arrivalPort = null;
+        boolean arePortsValid = false;
+
+        while (!arePortsValid) {
+            System.out.print("Enter Departure Port (e.g., p_1): ");
+            departurePort = scanner.nextLine();
+
+            System.out.print("Enter Arrival Port (e.g., p_4): ");
+            arrivalPort = scanner.nextLine();
+
+            if (departurePort.equals(arrivalPort)) {
+                System.out.println("Departure and Arrival Ports must be different.");
+            } else {
+                // Determine the landing ability based on departure and arrival ports
+                boolean canLand = determineLandingAbilityForTruck(departurePort, arrivalPort);
+
+                if (canLand) {
+                    arePortsValid = true; // Ports are valid, exit the loop
+                } else {
+                    System.out.println("Unable to create the trip. Landing ability mismatch. Please re-enter ports.");
+                }
+            }
+        }
+
+        String truckStatus = null;
+        boolean isValidTruckStatus = false;
+
+        while (!isValidTruckStatus) {
+            System.out.print("Enter Truck Status (Ongoing/Completed/Getting Goods): ");
+            truckStatus = scanner.nextLine();
+
+            // Check if the entered status is valid (you can add more checks as needed)
+            if (truckStatus.equalsIgnoreCase("Ongoing") ||
+                    truckStatus.equalsIgnoreCase("Completed") ||
+                    truckStatus.equalsIgnoreCase("Getting Goods")) {
+                isValidTruckStatus = true;
+            } else {
+                System.out.println("Invalid Truck Status. Please enter a valid status.");
+            }
+        }
+
+        // Create a trip entry string
+        String tripEntry = String.format("T1, %s, %s, %s, %s, %s", truckName, dateFormat.format(departureDate),
+                departurePort, arrivalPort, truckStatus);
+
+        // Write the trip entry to the departure port-specific file
+        appendTripEntryToFile(tripEntry, getPortTripFilePath(departurePort));
+
+        // Write the trip entry to the arrival port-specific file
+        appendTripEntryToFile(tripEntry, getPortTripFilePath(arrivalPort));
+
+        // Write the trip entry to the main trip file
+        appendTripEntryToFile(tripEntry, TripFilePath);
+
+        System.out.println("Truck trip created successfully!");
+    }
+
+
+    private static String getPortTripFilePath(String port) {
+        // Generate the port-specific trip file path based on the port ID
+        switch (port) {
+            case "p_1":
+                return Port1Trip;
+            case "p_2":
+                return Port2Trip;
+            case "p_3":
+                return Port3Trip;
+            case "p_4":
+                return Port4Trip;
+            case "p_5":
+                return Port5Trip;
+            default:
+                return "";
+        }
+    }
+
+    private static void appendTripEntryToFile(String tripEntry, String filePath) {
+        // Append the trip entry to the specified file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
+            writer.println(tripEntry);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean isTruckIdValid(String truckId) {
+        // Read the truck data from your file and check if the provided truck ID exists
+        try (BufferedReader reader = new BufferedReader(new FileReader(TruckFilePath))) {
+            String line;
+            boolean skipFirstLine = true; // Skip the header line
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue;
+                }
+                String[] truckData = line.split(",");
+                String id = truckData[0].trim();
+                if (id.equals(truckId)) {
+                    return true; // Found a match
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Truck ID not found
+    }
+    private static boolean isShipIdValid(String shipId) {
+        // Read the truck data from your file and check if the provided truck ID exists
+        try (BufferedReader reader = new BufferedReader(new FileReader(ShipFilePath))) {
+            String line;
+            boolean skipFirstLine = true; // Skip the header line
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue;
+                }
+                String[] shipData = line.split(",");
+                String id = shipData[0].trim();
+                if (id.equals(shipId)) {
+                    return true; // Found a match
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Ship ID not found
+    }
+
+    // Helper method to check if the provided truck name matches the truck name associated with the truck ID
+    private static boolean isTruckNameMatched(String truckId, String truckName) {
+        // Read the truck data from your file and check if the provided truck name matches the truck name associated with the truck ID
+        try (BufferedReader reader = new BufferedReader(new FileReader(TruckFilePath))) {
+            String line;
+            boolean skipFirstLine = true; // Skip the header line
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue;
+                }
+                String[] truckData = line.split(",");
+                String id = truckData[0].trim();
+                String name = truckData[1].trim();
+                if (id.equals(truckId) && name.equals(truckName)) {
+                    return true; // Found a match
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Truck name doesn't match the truck ID
+    }
+
+    private static boolean isShipNameMatched(String shipId, String shipName) {
+        // Read the truck data from your file and check if the provided truck name matches the truck name associated with the truck ID
+        try (BufferedReader reader = new BufferedReader(new FileReader(ShipFilePath))) {
+            String line;
+            boolean skipFirstLine = true; // Skip the header line
+            while ((line = reader.readLine()) != null) {
+                if (skipFirstLine) {
+                    skipFirstLine = false;
+                    continue;
+                }
+                String[] truckData = line.split(",");
+                String id = truckData[0].trim();
+                String name = truckData[1].trim();
+                if (id.equals(shipId) && name.equals(shipName)) {
+                    return true; // Found a match
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Ship name doesn't match the truck ID
+    }
+    private static boolean determineLandingAbilityForShip(String departurePort, String arrivalPort) {
+        // Define landing abilities for your ports
+        HashMap<String, Boolean> landingAbilities = new HashMap<>();
+        //WILL CHANGE SO THAT IT GET THE INFORMATION FROM THE PORT FILES INSTEAD OF CREATING THEM MANUALLY
+        landingAbilities.put("p_1", true);
+        landingAbilities.put("p_2", true);
+        landingAbilities.put("p_3", false);
+        landingAbilities.put("p_4", true);
+        landingAbilities.put("p_5", true);
+
+        // Get the landing abilities for the specified ports
+        Boolean departureLandingAbility = landingAbilities.get(departurePort);
+        Boolean arrivalLandingAbility = landingAbilities.get(arrivalPort);
+
+        // Compare the landing abilities of the two ports
+        return departureLandingAbility != null && arrivalLandingAbility != null && !departureLandingAbility.equals(arrivalLandingAbility);
+    }
+
+    private static boolean determineLandingAbilityForTruck(String departurePort, String arrivalPort) {
+        // Define landing abilities for your ports
+        HashMap<String, Boolean> landingAbilities = new HashMap<>();
+        //WILL CHANGE SO THAT IT GET THE INFORMATION FROM THE PORT FILES INSTEAD OF CREATING THEM MANUALLY
+        landingAbilities.put("p_1", true);
+        landingAbilities.put("p_2", true);
+        landingAbilities.put("p_3", false);
+        landingAbilities.put("p_4", true);
+        landingAbilities.put("p_5", true);
+
+        // Get the landing abilities for the specified ports
+        Boolean departureLandingAbility = landingAbilities.get(departurePort);
+        Boolean arrivalLandingAbility = landingAbilities.get(arrivalPort);
+
+        // Compare the landing abilities of the two ports
+        return departureLandingAbility != null && arrivalLandingAbility != null && departureLandingAbility.equals(arrivalLandingAbility);
+    }
+    // ... Other class members ..
 
     //REMOVING PURPOSE
     public boolean removePort(){
@@ -713,6 +1159,16 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean listTripInAGivenDay() {
+        return false;
+    }
+
+    @Override
+    public boolean listTripBetweenTwoDays() {
+        return false;
     }
 
     public boolean checkPort(int portChoice){

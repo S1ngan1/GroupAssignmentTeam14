@@ -5,5 +5,4 @@ public interface AddingForSystemAdmin {
     public boolean addVehicle();
     public boolean addContainer();
 
-
 }

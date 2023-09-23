@@ -120,7 +120,7 @@ public class Port implements Serializable {
     public void listVehicleInPort() {
         // Check if the ArrayList is empty
         if (vehicleHangar.isEmpty()) {
-            System.out.println("There is no vehicle to be displayed");
+            System.out.println("There are no vehicles to be displayed");
             return;
         }
 
@@ -140,6 +140,32 @@ public class Port implements Serializable {
                     vehicle.getFuelCapacity(),
                     vehicle.getCarryingCapacity(),
                     vehicle.getCurrentPort());
+        }
+
+        // Print the footer
+        System.out.println("------------------------------------------------------------------------------------------------------------------");
+    }
+
+
+    public void listContainerInPort() {
+        // Check if the ArrayList is empty
+        if (containerHangar.isEmpty()) {
+            System.out.println("There are no containers to be displayed.");
+            return;
+        }
+
+        // Print the header
+        System.out.println("===========LIST OF CONTAINERS IN THE PORT===============");
+        System.out.println("-------------------------------------------------------");
+        System.out.println("| containerID |    containerType    | containerWeight |");
+        System.out.println("-------------------------------------------------------");
+
+        // Iterate through the ArrayList and print each container's information
+        for (Container container : containerHangar) {
+            System.out.printf("| %-11s | %-19s | %-15f |\n",
+                    container.getId(),
+                    container.getContainerType(),
+                    container.getWeight());
         }
 
         // Print the footer

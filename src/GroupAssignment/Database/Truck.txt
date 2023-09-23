@@ -2,7 +2,7 @@ truckID, truckName, type, currentFuel, fuelCapacity, carryingCapacity, currentPo
 tr_101, Ford_F-150, Basic, 15.18, 23, 690, p_1
 tr_102, Chevrolet_Colorado_ZR2, Tanker, 14.77, 21.1, 685, p_2
 tr_103, Toyota_Tacoma_TRD_Pro, Basic, 15.825, 21.1, 581, p_1
-tr_104, Chevy_Silverdo, Reefer, 11.25, 25, 2034.2, null
+tr_104, Chevy_Silverdo, Reefer, 11.25, 25, 2034.2,
 tr_105, Nissan_Titan, Basic, 21.7, 31, 1028, p_2
 tr_106, Freightliner_Cascadia, Basic, 101.25, 135, 8436.82, p_2
 tr_107, Peterbilt_389, Basic, 121.5, 150, 5443.1, p_5

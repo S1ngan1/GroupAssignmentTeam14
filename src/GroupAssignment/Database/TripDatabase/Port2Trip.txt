@@ -1,0 +1,1 @@
+tripID, vehicleName, date, dispatching_port, destination_port, Status

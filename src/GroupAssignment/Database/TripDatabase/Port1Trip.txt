@@ -1,0 +1,3 @@
+tripID, vehicleName, date, dispatching_port, destination_port, Status
+T1, Container_Transportation, 2022-10-10, p_1, p_3, Getting Goods
+T1, Thailand_Container_Ship, 2023-10-09, p_1, p_3, Completed
