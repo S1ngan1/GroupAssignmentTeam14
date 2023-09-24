@@ -313,10 +313,11 @@ public class Menu {
                            System.out.println("Select an option:");
                            System.out.println("1. List all the container: ");
                            System.out.println("2. List all the vehicle: ");
-                           System.out.println("3. Checking port status: ");
-                           System.out.println("4. List all the trips from day A to day B");
-                           System.out.println("5. Back to the previous page ");
-                           System.out.println("6. Exit ");
+                           System.out.println("3. Remove a container");
+                           System.out.println("4. Checking port status: ");
+                           System.out.println("5. List all the trips from day A to day B");
+                           System.out.println("6. Back to the previous page ");
+                           System.out.println("7. Exit ");
                            portNChoice = scanner.nextInt();
 
                            switch (portNChoice) {
@@ -327,9 +328,12 @@ public class Menu {
                                    currentPortList.get(portChoice - 1).listVehicleInPort();
                                    break;
                                case 3:
-                                   System.out.println(currentPortList.get(portChoice - 1));
+                                   portManager.removeContainerForPortManager();
                                    break;
                                case 4:
+                                   System.out.println(currentPortList.get(portChoice - 1));
+                                   break;
+                               case 5:
                                    Scanner scanner1 = new Scanner(System.in);
                                    Scanner scanner2 = new Scanner(System.in);
                                    List<Trip> tripsForPort = Trip.listFromDateToDateForPM(portChoice, scanner1, scanner2);
@@ -343,9 +347,9 @@ public class Menu {
                                        System.out.println();
                                    }
                                    break;
-                               case 5: //Back to the previous page
+                               case 6: //Back to the previous page
                                    break;
-                               case 6:
+                               case 7:
                                    System.out.println("Exiting the program.");
                                    scanner.close();
                                    System.exit(0);
@@ -353,7 +357,7 @@ public class Menu {
                                default:
                                    System.out.println("Invalid choice. Please enter a number from 1 to 5.");
                            }
-                           if (portNChoice == 5) {
+                           if (portNChoice == 6) {
                                break; // Exit the inner loop when the admin chooses to exit
                            }
                        }
