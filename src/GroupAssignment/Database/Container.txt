@@ -1,15 +1,17 @@
 ContainerID, ContainerType, Weight
 1, Dry Storage, 500
+2, Dry Storage, 700
 3, Dry Storage, 1000
 4, Dry Storage, 4000
 5, Dry Storage, 2000
 6, Dry Storage, 10000
 7, Liquid, 3000
-8, Liquid, 2000.0
 9, Liquid, 10000
+10, Liquid, 4200
 11, Liquid, 3500
 12, Liquid, 5000
 13, Open Top, 7000
+14, Open Top, 6000
 15, Open Top, 5000
 16, Open Top, 6000
 17, Open Top, 5000
@@ -22,11 +24,6 @@ ContainerID, ContainerType, Weight
 24, Open Side, 12000
 25, Refrigerated, 4500
 26, Refrigerated, 8000
-27, Refrigerated, 6000
 28, Refrigerated, 9000
+29, Refrigerated, 7500
 30, Refrigerated, 6500
-31, Refrigerated, 12000.0
-
-2, Dry Storage, 700.0
-29, Refrigerated, 7500.0
-14, Open Top, 6000.0

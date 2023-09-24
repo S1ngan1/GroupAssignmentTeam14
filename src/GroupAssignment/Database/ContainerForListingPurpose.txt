@@ -30,5 +30,3 @@ ContainerID, ContainerType, Weight
 29, Refrigerated, 7500
 30, Refrigerated, 6500
 
-
-31, Refrigerated, 12000.0

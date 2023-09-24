@@ -80,21 +80,35 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
                     continue; // Skip the first line (header)
                 }
                 String[] parts = line.split(", ");
-                String port_ID = parts[0];
-                String port_name = parts[1];
-                double X = Double.parseDouble(parts[2]);
-                double Y = Double.parseDouble(parts[3]);
-                double storingCapacity = Double.parseDouble(parts[4]);
-                boolean landingAbility = Boolean.parseBoolean(parts[5]);
-                ports.add(new Port(port_ID, port_name, X, Y, storingCapacity, landingAbility));
+                if (parts.length != 6) {
+                    System.err.println("Invalid data format in the port file.");
+                    continue; // Skip this line and continue with the next
+                }
+                try {
+                    String port_ID = parts[0];
+                    String port_name = parts[1];
+                    double X = Double.parseDouble(parts[2]);
+                    double Y = Double.parseDouble(parts[3]);
+                    double storingCapacity = Double.parseDouble(parts[4]);
+                    boolean landingAbility = Boolean.parseBoolean(parts[5]);
+                    ports.add(new Port(port_ID, port_name, X, Y, storingCapacity, landingAbility));
+                } catch (NumberFormatException e) {
+                    System.err.println("Error parsing numeric data in the port file.");
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.err.println("An unexpected error occurred while processing the port file.");
+                    e.printStackTrace();
+                }
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("Port file not found: " + portFilePath);
+            e.printStackTrace();
         } catch (IOException e) {
-            // Handle exceptions (e.g., file not found or invalid data)
+            System.err.println("An error occurred while reading the port file.");
             e.printStackTrace();
         }
         return ports;
     }
-
     private static void savePorts(ArrayList<Port> ports) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(portFilePath))) {
             for (Port port : ports) {
@@ -924,7 +938,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
 
     public boolean removeVehicle() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the vehicle ID to delete: ");
+        System.out.print("Enter the vehicle ID to delete (sh_number or tr_number): ");
         String vehicleIDToDelete = scanner.nextLine();
 
         // Validate the input format using a regular expression

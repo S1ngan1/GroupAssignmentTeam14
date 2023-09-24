@@ -2,7 +2,7 @@ package GroupAssignment.Vehicle;
 import GroupAssignment.Container.Container;
 import GroupAssignment.FilePaths.FilePaths;
 import GroupAssignment.ScreenDisplay.SystemAdmin;
-import GroupAssignment.Vehicle.Vehicle;
+import java.util.InputMismatchException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -53,11 +53,17 @@ public class Ship extends Vehicle {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose the container to load");
         System.out.print("Container ID: ");
-        int ID = scanner.nextInt();
-        scanner.nextLine();
+        int ID;
+
+        try {
+            ID = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+        } catch (InputMismatchException e) {
+            System.err.println("Invalid input format. Please enter a valid integer for Container ID.");
+            return false; // Return false in case of an exception
+        }
 
         String searchID = Integer.toString(ID); // Replace with the ID you want to search for
-
         // Read data from the text file
         ArrayList<String> lines = new ArrayList<>();
         boolean firstLine = true; // Flag to track the first line (header)
@@ -125,10 +131,17 @@ public class Ship extends Vehicle {
         // Telling the ID of the container to be removed
         Scanner scanner = new Scanner(System.in);
         System.out.print("Unloading container ID: ");
-        int ID = scanner.nextInt();
-        scanner.nextLine();
+        int ID;
 
-        String searchID = Integer.toString(ID);
+        try {
+            ID = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+        } catch (InputMismatchException e) {
+            System.err.println("Invalid input format. Please enter a valid integer for Container ID.");
+            return false; // Return false in case of an exception
+        }
+
+        String searchID = Integer.toString(ID); // Replace with the ID you want to search for
         boolean successfullyUnloaded = false;
 
         // Check if the carrier is not empty
@@ -183,9 +196,18 @@ public class Ship extends Vehicle {
     @Override
     public boolean moveVehicle(Scanner scanner, String vehicleID) {
         boolean ableToUnload = true;
-        System.out.print("Move to port number: ");
-        int destinationPort = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Move to port number (enter number only): ");
+
+        int destinationPort;
+
+        try {
+            destinationPort = scanner.nextInt();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.err.println("Invalid input format. Please enter a valid integer for the destination port.");
+            return false; // Return false in case of an exception
+        }
+
 
         for (Container container : carrier) {
             //WE HAVE 3 CONDITIONS FOR A TRANSPORTATION OF SHIP TO EXIST:

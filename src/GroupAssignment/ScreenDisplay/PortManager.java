@@ -3,10 +3,7 @@ package GroupAssignment.ScreenDisplay;
 import GroupAssignment.FilePaths.FilePaths;
 import GroupAssignment.Port.Port;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -16,8 +13,6 @@ public class PortManager {
     public static final String ListingContainerFilePath = FilePaths.ListingContainerFilePath;
     public static final String portFilePath = FilePaths.portFilePath;
 
-    public static final String ShipFilePath = FilePaths.ShipFilePath;
-    public static final String TruckFilePath = FilePaths.TruckFilePath;
 
     public boolean checkPort(int portChoice){
         try (BufferedReader reader = new BufferedReader(new FileReader(portFilePath))) {
@@ -48,7 +43,6 @@ public class PortManager {
             return false;
         }
     }
-
     public boolean removeContainerForPortManager() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the ContainerID to delete: ");
@@ -114,9 +108,13 @@ public class PortManager {
 
             System.out.println("Container with ContainerID " + containerIDToDelete + " deleted successfully.");
             return true;
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found. Check the file paths: " + ListingContainerFilePath + " and " + ContainerFilePath);
             e.printStackTrace();
-            System.err.println("Failed to delete the container.");
+            return false;
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading or writing the files.");
+            e.printStackTrace();
             return false;
         }
     }
