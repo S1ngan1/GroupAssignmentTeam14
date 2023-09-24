@@ -1161,6 +1161,45 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         }
     }
 
+    public static void displayTotalContainerWeightByType(String filePath) {
+        HashMap<String, Double> containerTypeToTotalWeight = new HashMap<>();
+
+        // Read data from the specified file and calculate total weight for each type
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            br.readLine(); // Skip the header line
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(", ");
+                if (parts.length == 3) {
+                    String containerType = parts[1];
+                    double weight = Double.parseDouble(parts[2]);
+
+                    // Update total weight for the container type
+                    containerTypeToTotalWeight.put(
+                            containerType,
+                            containerTypeToTotalWeight.getOrDefault(containerType, 0.0) + weight
+                    );
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Print the formatted output
+        System.out.println("===WEIGHT OF EACH CONTAINER TYPE===");
+        System.out.println("-----------------------------------");
+        System.out.println("| ContainerType   | Total Weight  |");
+        System.out.println("-----------------------------------");
+
+        for (HashMap.Entry<String, Double> entry : containerTypeToTotalWeight.entrySet()) {
+            String containerType = entry.getKey();
+            double totalWeight = entry.getValue();
+            System.out.printf("| %-15s | %-13.2f |\n", containerType, totalWeight);
+        }
+
+        System.out.println("----------------------------------------------");
+    }
+
     @Override
     public boolean listTripInAGivenDay() {
         return false;

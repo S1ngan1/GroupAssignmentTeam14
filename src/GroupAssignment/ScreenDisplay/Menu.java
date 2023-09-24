@@ -16,7 +16,7 @@ import java.text.ParseException;
 public class Menu {
     static ArrayList<Port> currentPortList = SystemAdmin.portList;
 
-    public static void mainMenu() throws IOException, InterruptedException, ParseException {
+    public static void startMenu() throws IOException, InterruptedException, ParseException{
         System.out.println("================================");
         System.out.println("COSC2081 GROUP ASSIGNMENT");
         System.out.println("CONTAINER PORT MANAGEMENT SYSTEM");
@@ -25,13 +25,10 @@ public class Menu {
         System.out.println("S3976250, Ly Minh Phuc");
         System.out.println("S3966954, Tran Hoang Khiem");
         System.out.println("S3957050, Nguyen Tu Quoc Thai");
-    }
-
-    public static void startMenu() {
         Scanner scanner = new Scanner(System.in);
 
         boolean isAuthenticated = false;
-        System.out.println("--------------------LOGIN PAGE---------------------");
+        System.out.println("------------------LOGIN PAGE-------------------");
 
        while(!isAuthenticated){
            //First thing a user see. 2 options to log in and an exit button
@@ -68,10 +65,12 @@ public class Menu {
                        System.out.println("9. Remove a container: ");
                        System.out.println("10. Add a new trip for ship");
                        System.out.println("11. Add a new trip for truck");
-                       System.out.println("12. Calculate distance between 2 ports");
-                       System.out.println("13. Managing activities inside the system");
-                       System.out.println("14. Back to the main system");
-                       System.out.println("15. Exit");
+                       System.out.println("12. List all the trips from day A to day B");
+                       System.out.println("13. Calculate distance between 2 ports");
+                       System.out.println("14. Calculate how much weight of each type of all containers");
+                       System.out.println("15. Managing activities inside the system");
+                       System.out.println("16. Back to the main system");
+                       System.out.println("17. Exit");
                        adminChoice = scanner.nextInt(); // Read the choice here
 
                        switch (adminChoice) {
@@ -109,9 +108,26 @@ public class Menu {
                                SystemAdmin.createTrucksTrip();
                                break;
                            case 12:
-                               admin.calculateDistance();
+                               Scanner scanner1 = new Scanner(System.in);
+                               Scanner scanner2 = new Scanner(System.in);
+                               List<Trip> tripsForPort = Trip.listFromDatetoDateforSA(scanner1, scanner2);
+                               for (Trip tripss : tripsForPort) {
+                                   System.out.println("Trip ID: " + tripss.getTripId());
+                                   System.out.println("Departure Port: " + tripss.getDispatchingPort());
+                                   System.out.println("Arrival Port: " + tripss.getDestinationPort());
+                                   System.out.println("Departure Date: " + tripss.getDepartureDate());
+                                   System.out.println("Arrival Date: " + tripss.getArrivalDate());
+                                   // Print other trip details as needed
+                                   System.out.println();
+                               }
                                break;
                            case 13:
+                               admin.calculateDistance();
+                               break;
+                           case 14:
+                               SystemAdmin.displayTotalContainerWeightByType(SystemAdmin.ContainerFilePath);
+                               break;
+                           case 15:
                                int navigateChoice;
                                while (true) {
                                    System.out.println("=======SYSTEM NAVIGATING========");
@@ -137,7 +153,7 @@ public class Menu {
                                                    System.out.println("Select an option:");
                                                    System.out.println("1. List all the container: ");
                                                    System.out.println("2. List all the vehicle: ");
-                                                   System.out.println("3. Change the attribute: ");
+                                                   System.out.println("3. Checking port status: ");
                                                    System.out.println("4. Back to the previous page ");
                                                    System.out.println("5. Exit ");
                                                    portNChoice = scanner.nextInt();
@@ -150,6 +166,7 @@ public class Menu {
                                                            currentPortList.get(portChoice - 1).listVehicleInPort();
                                                            break;
                                                        case 3:
+                                                           System.out.println(currentPortList.get(portChoice - 1));
                                                            break;
                                                        case 4: //Back to the previous page
                                                            break;
@@ -266,9 +283,9 @@ public class Menu {
                                    }
                                }
                                break;
-                           case 14: //Back to the previous page
+                           case 16: //Back to the previous page
                                break;
-                           case 15:
+                           case 17:
                                System.out.println("Exiting the program.");
                                scanner.close();
                                System.exit(0);
@@ -277,7 +294,7 @@ public class Menu {
                                System.out.println("Invalid choice. Please enter a number from 1 to 15.");
                        }
 
-                       if (adminChoice == 14) {
+                       if (adminChoice == 16) {
                            break; // Exit the inner loop when the admin chooses to exit
                        }
                    }
@@ -289,7 +306,6 @@ public class Menu {
                    portChoice = scanner.nextInt();
                    scanner.nextLine();
 
-
                    if (portManager.checkPort(portChoice)) {
                        int portNChoice;
                        while (true) {
@@ -297,9 +313,10 @@ public class Menu {
                            System.out.println("Select an option:");
                            System.out.println("1. List all the container: ");
                            System.out.println("2. List all the vehicle: ");
-                           System.out.println("3. Change the attribute: ");
-                           System.out.println("4. Back to the previous page ");
-                           System.out.println("5. Exit ");
+                           System.out.println("3. Checking port status: ");
+                           System.out.println("4. List all the trips from day A to day B");
+                           System.out.println("5. Back to the previous page ");
+                           System.out.println("6. Exit ");
                            portNChoice = scanner.nextInt();
 
                            switch (portNChoice) {
@@ -309,10 +326,25 @@ public class Menu {
                                    currentPortList.get(portChoice - 1).listVehicleInPort();
                                    break;
                                case 3:
+                                   System.out.println(currentPortList.get(portChoice - 1));
                                    break;
-                               case 4: //Back to the previous page
+                               case 4:
+                                   Scanner scanner1 = new Scanner(System.in);
+                                   Scanner scanner2 = new Scanner(System.in);
+                                   List<Trip> tripsForPort = Trip.listFromDateToDateForPM(portChoice, scanner1, scanner2);
+                                   for (Trip trip : tripsForPort) {
+                                       System.out.println("Trip ID: " + trip.getTripId());
+                                       System.out.println("Departure Port: " + trip.getDispatchingPort());
+                                       System.out.println("Arrival Port: " + trip.getDestinationPort());
+                                       System.out.println("Departure Date: " + trip.getDepartureDate());
+                                       System.out.println("Arrival Date: " + trip.getArrivalDate());
+                                       // Print other trip details as needed
+                                       System.out.println();
+                                   }
                                    break;
-                               case 5:
+                               case 5: //Back to the previous page
+                                   break;
+                               case 6:
                                    System.out.println("Exiting the program.");
                                    scanner.close();
                                    System.exit(0);
@@ -320,7 +352,7 @@ public class Menu {
                                default:
                                    System.out.println("Invalid choice. Please enter a number from 1 to 5.");
                            }
-                           if (portNChoice == 4) {
+                           if (portNChoice == 5) {
                                break; // Exit the inner loop when the admin chooses to exit
                            }
                        }
