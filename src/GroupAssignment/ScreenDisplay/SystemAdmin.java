@@ -107,7 +107,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
         }
     }
 
-/*
+
     private static ArrayList<String> readShipNamesFromFile(String filePath) {
         ArrayList<String> shipNames = new ArrayList<>();
 
@@ -163,7 +163,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
 
         return truckNames;
     }
-*/
+
 
     private static HashMap<String, Vehicle> loadVehicles() {
         HashMap<String, Vehicle> vehicles = new HashMap<>();
@@ -441,7 +441,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
 
         }
         else {
-            System.out.println("Failed to create a container");
+            System.err.println("Failed to create a container");
         }
         return true;
     }
@@ -458,7 +458,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             isShipIdValid = isShipIdValid(shipId);
 
             if (!isShipIdValid) {
-                System.out.println("Invalid ship ID. Please enter a valid ship ID.");
+                System.err.println("Invalid ship ID. Please enter a valid ship ID.");
             }
         }
 
@@ -475,7 +475,7 @@ public class SystemAdmin implements AddingForSystemAdmin, RemovingForSystemAdmin
             if (isShipNameMatched && shipNames.contains(" " + shipName)) {
                 isValidShipName = true;
             } else {
-                System.out.println("Ship is not suitable. Please enter a valid ship name.");
+                System.err.println("Ship is not suitable. Please enter a valid ship name.");
             }
         }
 

@@ -321,6 +321,7 @@ public class Menu {
 
                            switch (portNChoice) {
                                case 1:
+                                   currentPortList.get(portChoice - 1).listContainerInPort();
                                    break;
                                case 2:
                                    currentPortList.get(portChoice - 1).listVehicleInPort();
